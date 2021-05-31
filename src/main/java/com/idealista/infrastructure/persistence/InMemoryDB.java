@@ -1,20 +1,21 @@
 package com.idealista.infrastructure.persistence;
 
-import org.springframework.stereotype.Repository;
+import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.picture.PictureVO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Repository
-public class InMemoryPersistence {
+public class InMemoryDB {
+    private static InMemoryDB inMemoryDB = null;
 
-    private List<AdVO> ads;
-    private List<PictureVO> pictures;
+    private ArrayList<AdVO> ads = new ArrayList<>();
+    private ArrayList<PictureVO> pictures = new ArrayList<>();
 
-    public InMemoryPersistence() {
-        ads = new ArrayList<AdVO>();
+    private InMemoryDB() {
+    /*    ads = new ArrayList<AdVO>();
         ads.add(new AdVO(1, "CHALET", "Este piso es una ganga, compra, compra, COMPRA!!!!!", Collections.<Integer>emptyList(), 300, null, null, null));
         ads.add(new AdVO(2, "FLAT", "Nuevo ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este ático de lujo", Arrays.asList(4), 300, null, null, null));
         ads.add(new AdVO(3, "CHALET", "", Arrays.asList(2), 300, null, null, null));
@@ -31,9 +32,30 @@ public class InMemoryPersistence {
         pictures.add(new PictureVO(4, "http://www.idealista.com/pictures/4", "HD"));
         pictures.add(new PictureVO(5, "http://www.idealista.com/pictures/5", "SD"));
         pictures.add(new PictureVO(6, "http://www.idealista.com/pictures/6", "SD"));
-        pictures.add(new PictureVO(7, "http://www.idealista.com/pictures/7", "SD"));
-        pictures.add(new PictureVO(8, "http://www.idealista.com/pictures/8", "HD"));
+        pictures.add(new PictureVO(7, "http://www.idealista.com/pictures/7", "SD"));*/
     }
 
-    //TODO crea los métodos que necesites
+    public static InMemoryDB getInstance(){
+        if(inMemoryDB == null){
+            inMemoryDB = new InMemoryDB();
+        }
+
+        return inMemoryDB;
+    }
+
+    public List<AdVO> getAds() {
+        return Collections.unmodifiableList(this.ads);
+    }
+
+    public List<PictureVO> getPictures() {
+        return Collections.unmodifiableList(this.pictures);
+    }
+
+    public void addAd(AdVO ad) {
+        this.ads.add(ad);
+    }
+
+    public void adPicture(PictureVO picture) {
+        this.pictures.add(picture);
+    }
 }

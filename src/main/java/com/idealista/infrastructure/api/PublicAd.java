@@ -1,5 +1,6 @@
 package com.idealista.infrastructure.api;
 
+import java.util.Collections;
 import java.util.List;
 
 public class PublicAd {
@@ -35,8 +36,7 @@ public class PublicAd {
         this.description = description;
     }
 
-    public List<String> getPictureUrls() {
-        return pictureUrls;
+    public List<String> getPictureUrls() { return  Collections.unmodifiableList(this.pictureUrls);
     }
 
     public void setPictureUrls(List<String> pictureUrls) {
