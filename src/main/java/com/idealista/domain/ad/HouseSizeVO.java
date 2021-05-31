@@ -11,4 +11,7 @@ public class HouseSizeVO {
         this.size = size;
     }
 
+    public Long value() {
+        return size;
+    }
 }

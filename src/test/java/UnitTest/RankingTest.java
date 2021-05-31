@@ -13,9 +13,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.atMost;
 
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +28,20 @@ public class RankingTest {
     private AdRepository adRepository;
 
     private ListRelevantAds listRelevantAds;
+
     private final ComputeAdPoints computeAdPoints = new ComputeAdPoints();
 
     private final String TWENTY_WORDS_DESCRIPTION_TEXT = "Lorem ipsum dolor sit amet consectetur adipiscing elit, ridiculus cum felis ante malesuada viverra, suscipit natoque sollicitudin pulvinar himenaeos molestie.";
     private final String FIFTY_WORDS_DESCRIPTION_TEXT = "Lorem ipsum dolor sit amet consectetur adipiscing elit tellus proin, aenean nascetur dictumst ullamcorper consequat orci primis felis congue, facilisi sem aliquet sapien quis fermentum urna varius. Sociosqu enim donec dapibus auctor pretium hendrerit tempor scelerisque, justo inceptos morbi faucibus convallis pharetra nibh, cum tristique elementum tincidunt dictum massa condimentum.";
     private final String GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT = " Lorem ipsum dolor sit amet consectetur adipiscing elit odio, mus massa congue mollis netus ultricies accumsan diam cras, egestas et etiam nibh cursus commodo ut. Vulputate non hendrerit eleifend condimentum, duis proin lacus orci, dapibus leo viverra. Velit maecenas nullam urna lectus pellentesque primis mauris augue, ad aliquam erat ultrices ante ridiculus facilisi, ullamcorper interdum a inceptos eros nunc magnis.";
+    private ScoreVO scoreSpy;
 
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
         listRelevantAds = new ListRelevantAds(adRepository);
+        ScoreVO score = new ScoreVO(0);
+        scoreSpy = Mockito.spy(score);
     }
 
     @Test
@@ -109,17 +115,19 @@ public class RankingTest {
 
     @Test
     public void when_ad_dont_have_any_image_score_should_decrease_10_points(){
+
+
         AdVO noImageAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(0),
+                scoreSpy,
                 new DateVO());
 
         ComputeAdPoints computeAdPoints = new ComputeAdPoints();
         computeAdPoints.compute(noImageAd);
 
-        assertEquals(0,noImageAd.getScore().value());
+        Mockito.verify(scoreSpy).decrease(10);
     }
 
     @Test
@@ -136,7 +144,7 @@ public class RankingTest {
         ComputeAdPoints computeAdPoints = new ComputeAdPoints();
         computeAdPoints.compute(hdImgaeAd);
 
-        assertEquals(20,hdImgaeAd.getScore().value());
+        Mockito.verify(scoreSpy).increase(20);
 
     }
     @Test
@@ -146,14 +154,14 @@ public class RankingTest {
                 new DescriptionVO(),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(0),
+                this.scoreSpy,
                 new DateVO(),
                 picture);
 
 
         computeAdPoints.compute(noHDImageAd);
 
-        assertEquals(10,noHDImageAd.getScore().value());
+        Mockito.verify(scoreSpy).increase(10);
 
     }
 
@@ -173,13 +181,13 @@ public class RankingTest {
                 new DescriptionVO("useful description"),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(0),
+                this.scoreSpy,
                 new DateVO(),
                 picture);
 
         computeAdPoints.compute(ad);
 
-        assertEquals(25,ad.getScore().value());
+        Mockito.verify(scoreSpy).increase(5);
 
     }
     @Test
@@ -189,11 +197,11 @@ public class RankingTest {
                 new DescriptionVO(TWENTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(0),
+                this.scoreSpy,
                 new DateVO());
         computeAdPoints.compute(ad);
 
-        assertEquals(15,ad.getScore().value());
+        Mockito.verify(scoreSpy).increase(10);
 
     }
 
@@ -203,11 +211,11 @@ public class RankingTest {
                 new DescriptionVO(FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(0),
+                this.scoreSpy,
                 new DateVO());
         computeAdPoints.compute(ad);
 
-        assertEquals(35,ad.getScore().value());
+        Mockito.verify(scoreSpy).increase(30);
     }
 
     @Test
@@ -216,11 +224,11 @@ public class RankingTest {
                 new DescriptionVO(GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(0),
+                this.scoreSpy,
                 new DateVO());
         computeAdPoints.compute(ad);
 
-        assertEquals(25,ad.getScore().value());
+        Mockito.verify(scoreSpy).increase(20);
     }
 
     @Test
@@ -229,12 +237,13 @@ public class RankingTest {
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático"),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(0),
+                this.scoreSpy,
                 new DateVO());
 
         computeAdPoints.compute(ad);
 
-        assertEquals(30,ad.getScore().value());
+        Mockito.verify(scoreSpy, atMost(5)).increase(5);
+
     }
 
 
@@ -249,11 +258,46 @@ public class RankingTest {
                         ,TypologyVO.PISO,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático "+FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
-                new ScoreVO(0),
+                this.scoreSpy,
                 new DateVO(),
                 picture);
 
-        assertEquals(100,ad.getScore().value());
+        computeAdPoints.compute(ad);
+
+        assertEquals(120,ad.getScore().value());
+    }
+
+    @Test
+    public void when_chalet_ad_meet_completeness_criteria_should_add_40_points(){
+        PictureVO picture = new PictureVO(1,new UrlVO("https://test.com"),QualityVO.HD);
+        AdVO ad =
+                new AdVO(1,TypologyVO.CHALET,
+                        new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático "+ GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
+                        new HouseSizeVO(100L),
+                        new GardenSizeVO(100L),
+                        this.scoreSpy,
+                        new DateVO(),
+                        picture);
+
+        computeAdPoints.compute(ad);
+
+        assertEquals(110,ad.getScore().value());
+    }
+
+    @Test
+    public void when_garage_ad_meet_completeness_criteria_should_add_40_points(){
+        PictureVO picture = new PictureVO(1,new UrlVO("https://test.com"),QualityVO.HD);
+        AdVO ad =
+                new AdVO(1,TypologyVO.GARAJE,
+                        new DescriptionVO(""),
+                        new HouseSizeVO(100L),
+                        this.scoreSpy,
+                        new DateVO(),
+                        picture);
+
+        computeAdPoints.compute(ad);
+
+        assertEquals(60,ad.getScore().value());
     }
 
 }

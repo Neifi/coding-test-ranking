@@ -10,6 +10,33 @@ public class ComputeAdPoints {
     public void compute(AdVO ad) {
         computeImageScore(ad);
         computeDescriptionScore(ad);
+        computeCompleteness(ad);
+    }
+
+    private void computeCompleteness(AdVO ad) {
+        if(TypologyVO.PISO.equals(ad.getTypology())) {
+            if (ad.getDescription().getWords().size() > 0
+                    && ad.getPictures() != null
+                    && ad.getHouseSize().value() > 0
+            ) {
+                ad.getScore().increase(40);
+            }
+        }
+        if(TypologyVO.CHALET.equals(ad.getTypology())) {
+            if (ad.getDescription().getWords().size() > 0
+                    && ad.getPictures() != null
+                    && ad.getHouseSize().value() > 0
+                    && ad.getGardenSize().value() > 0
+            ) {
+                ad.getScore().increase(40);
+            }
+        }
+        if(TypologyVO.GARAJE.equals(ad.getTypology())) {
+            if (ad.getPictures() != null && ad.getHouseSize().value() > 0
+            ) {
+                ad.getScore().increase(40);
+            }
+        }
     }
 
     private void computeDescriptionScore(AdVO ad) {
@@ -21,15 +48,15 @@ public class ComputeAdPoints {
             int endSize = 49;
             ad.getScore().increase(5);
 
-            if (TypologyVO.PISO.equals(ad.getTypology()) && descriptionSize(descriptionLength, initialSize, endSize)) {
+            if (TypologyVO.PISO.equals(ad.getTypology()) && descriptionWordSizeIsBetween(descriptionLength, initialSize, endSize)) {
                 ad.getScore().increase(10);
 
             }
-            if (TypologyVO.PISO.equals(ad.getTypology()) && descriptionTextSizeIsGreaterThan(descriptionLength, 50)) {
+            if (TypologyVO.PISO.equals(ad.getTypology()) && descriptionWordSizeIsGreaterThan(descriptionLength, 50)) {
                 ad.getScore().increase(30);
             }
 
-            if (TypologyVO.CHALET.equals(ad.getTypology()) && descriptionTextSizeIsGreaterThan(descriptionLength, 51)) {
+            if (TypologyVO.CHALET.equals(ad.getTypology()) && descriptionWordSizeIsGreaterThan(descriptionLength, 51)) {
                 ad.getScore().increase(20);
             }
 
@@ -46,12 +73,12 @@ public class ComputeAdPoints {
         }
     }
 
-    private boolean descriptionTextSizeIsGreaterThan(int descriptionLength, int maxSize) {
+    private boolean descriptionWordSizeIsGreaterThan(int descriptionLength, int maxSize) {
 
         return descriptionLength >= maxSize;
     }
 
-    private boolean descriptionSize(int descriptionLength, int initialSize, int endSize) {
+    private boolean descriptionWordSizeIsBetween(int descriptionLength, int initialSize, int endSize) {
         return descriptionLength >= initialSize && descriptionLength <= endSize;
     }
 

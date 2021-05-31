@@ -1,6 +1,7 @@
 package com.idealista.domain.ad;
 
 public class GardenSizeVO {
+
     private Long size;
 
     public GardenSizeVO(Long size) {
@@ -8,5 +9,9 @@ public class GardenSizeVO {
             throw new RuntimeException("House size cannot be less than zero");
         }
         this.size = size;
+    }
+
+    public Long value() {
+        return size;
     }
 }
