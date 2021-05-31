@@ -136,7 +136,7 @@ public class RankingTest {
         ComputeAdPoints computeAdPoints = new ComputeAdPoints();
         computeAdPoints.compute(hdImgaeAd);
 
-        assertEquals(30,hdImgaeAd.getScore().value());
+        assertEquals(20,hdImgaeAd.getScore().value());
 
     }
     @Test
@@ -153,7 +153,7 @@ public class RankingTest {
 
         computeAdPoints.compute(noHDImageAd);
 
-        assertEquals(20,noHDImageAd.getScore().value());
+        assertEquals(10,noHDImageAd.getScore().value());
 
     }
 
@@ -179,7 +179,7 @@ public class RankingTest {
 
         computeAdPoints.compute(ad);
 
-        assertEquals(35,ad.getScore().value());
+        assertEquals(25,ad.getScore().value());
 
     }
     @Test
@@ -189,7 +189,7 @@ public class RankingTest {
                 new DescriptionVO(TWENTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(10),
+                new ScoreVO(0),
                 new DateVO());
         computeAdPoints.compute(ad);
 
@@ -216,7 +216,7 @@ public class RankingTest {
                 new DescriptionVO(GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(10),
+                new ScoreVO(0),
                 new DateVO());
         computeAdPoints.compute(ad);
 
@@ -241,6 +241,7 @@ public class RankingTest {
     //pisos: desc,almenos 1 foto,tamaño de vivienda
     //chalet: desc,almenos 1 foto,tamaño de vivienda y jardin
     //garaje: almenos 1 foto,tamaño de vivienda
+    @Test
     public void when_apartment_ad_meet_completeness_criteria_should_add_40_points(){
         PictureVO picture = new PictureVO(1,new UrlVO("https://test.com"),QualityVO.HD);
         AdVO ad =

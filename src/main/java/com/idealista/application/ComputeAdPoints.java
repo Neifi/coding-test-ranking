@@ -5,9 +5,6 @@ import com.idealista.domain.ad.TypologyVO;
 import com.idealista.domain.picture.PictureVO;
 import com.idealista.domain.picture.QualityVO;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 public class ComputeAdPoints {
 
     public void compute(AdVO ad) {
@@ -24,7 +21,7 @@ public class ComputeAdPoints {
             int endSize = 49;
             ad.getScore().increase(5);
 
-            if (TypologyVO.PISO.equals(ad.getTypology()) && descriptionTextSizeIsBetween(descriptionLength, initialSize, endSize)) {
+            if (TypologyVO.PISO.equals(ad.getTypology()) && descriptionSize(descriptionLength, initialSize, endSize)) {
                 ad.getScore().increase(10);
 
             }
@@ -54,7 +51,7 @@ public class ComputeAdPoints {
         return descriptionLength >= maxSize;
     }
 
-    private boolean descriptionTextSizeIsBetween(int descriptionLength, int initialSize, int endSize) {
+    private boolean descriptionSize(int descriptionLength, int initialSize, int endSize) {
         return descriptionLength >= initialSize && descriptionLength <= endSize;
     }
 

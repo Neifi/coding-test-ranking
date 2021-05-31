@@ -4,11 +4,11 @@ public class ScoreVO {
 
     private int score;
 
-    public ScoreVO(int score) {
-        if(score < 0){
+    public ScoreVO(int value) {
+        if(value < 0){
             throw new RuntimeException("score cannot be less than zero");
         }
-        this.score = score;
+        this.score = value;
     }
 
     public int value() {
@@ -25,6 +25,6 @@ public class ScoreVO {
         if(value < 0){
             throw new RuntimeException("value cannot be less than zero");
         }
-        this.score += score;
+        this.score += value;
     }
 }
