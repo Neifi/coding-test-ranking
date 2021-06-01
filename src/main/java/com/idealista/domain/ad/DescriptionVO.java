@@ -29,5 +29,9 @@ public class DescriptionVO {
         this.descriptionLength = desc.length();
     }
 
+    public boolean isEmpty(){
+        return this.descriptionLength == 0;
+    }
+
 
 }

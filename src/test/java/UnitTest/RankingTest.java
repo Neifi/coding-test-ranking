@@ -13,11 +13,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.atMost;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 new ScoreVO(100),
-                new DateVO(),
+                new IrrelevantSinceVO(),
                 new PictureVO());
 
         AdVO adTwo = new AdVO(1,TypologyVO.PISO,
@@ -59,7 +59,7 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 new ScoreVO(70),
-                new DateVO(),
+                new IrrelevantSinceVO(),
                 new PictureVO());
 
         AdVO adThree = new AdVO(1,TypologyVO.PISO,
@@ -67,21 +67,21 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 new ScoreVO(50),
-                new DateVO(),
+                new IrrelevantSinceVO(),
                 new PictureVO());
         AdVO adFour = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 new ScoreVO(40),
-                new DateVO(),
+                new IrrelevantSinceVO(),
                 new PictureVO());
         AdVO lessRelevantAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 new ScoreVO(10),
-                new DateVO(),
+                new IrrelevantSinceVO(),
                 new PictureVO());
         List<AdVO> ads = new ArrayList<>();
 
@@ -122,29 +122,32 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 scoreSpy,
-                new DateVO());
+                new IrrelevantSinceVO());
 
         ComputeAdPoints computeAdPoints = new ComputeAdPoints();
-        computeAdPoints.compute(noImageAd);
+        computeAdPoints.computeImageScore(noImageAd);
 
-        Mockito.verify(scoreSpy).decrease(10);
+        Mockito.verify(scoreSpy,atLeast(1)).decrease(10);
+        Mockito.verify(scoreSpy,atMost(1)).decrease(10);
     }
 
     @Test
-    public void when_ad_have_hd_image_should_add_20_points(){
+    public void when_ad_have_one_hd_image_should_add_20_points(){
         PictureVO picture = new PictureVO(1,new UrlVO("https://test.com"),QualityVO.HD);
-        AdVO hdImgaeAd = new AdVO(1,TypologyVO.PISO,
+        AdVO withHDImageAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(0),
-                new DateVO(),
+                scoreSpy,
+                new IrrelevantSinceVO(),
                 picture);
 
         ComputeAdPoints computeAdPoints = new ComputeAdPoints();
-        computeAdPoints.compute(hdImgaeAd);
+        computeAdPoints.computeImageScore(withHDImageAd);
 
-        Mockito.verify(scoreSpy).increase(20);
+        Mockito.verify(scoreSpy,atLeast(1)).increase(20);
+        Mockito.verify(scoreSpy,atMost(1)).increase(20);
+
 
     }
     @Test
@@ -155,13 +158,15 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 this.scoreSpy,
-                new DateVO(),
+                new IrrelevantSinceVO(),
                 picture);
 
 
-        computeAdPoints.compute(noHDImageAd);
+        computeAdPoints.computeImageScore(noHDImageAd);
 
-        Mockito.verify(scoreSpy).increase(10);
+        Mockito.verify(scoreSpy,atLeast(1)).increase(10);
+        Mockito.verify(scoreSpy,atMost(1)).increase(10);
+
 
     }
 
@@ -177,72 +182,77 @@ public class RankingTest {
     @Test
     public void when_ad_has_description_text_should_add_5_points(){
         PictureVO picture = new PictureVO(1,new UrlVO("https://test.com"),QualityVO.HD);
-        AdVO ad = new AdVO(1,TypologyVO.PISO,
+        AdVO withImageAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO("useful description"),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 this.scoreSpy,
-                new DateVO(),
+                new IrrelevantSinceVO(),
                 picture);
 
-        computeAdPoints.compute(ad);
+        computeAdPoints.computeDescriptionScore(withImageAd);
 
-        Mockito.verify(scoreSpy).increase(5);
+        Mockito.verify(scoreSpy,atMost(1)).increase(5);
+        Mockito.verify(scoreSpy,atLeast(1)).increase(5);
 
     }
     @Test
     public void when_apartment_ad_has_description_text_size_between_20_and_49_should_add_10_points(){
 
-        AdVO ad = new AdVO(1,TypologyVO.PISO,
+        AdVO noImageAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(TWENTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 this.scoreSpy,
-                new DateVO());
-        computeAdPoints.compute(ad);
+                new IrrelevantSinceVO());
+        computeAdPoints.computeDescriptionScore(noImageAd);
 
-        Mockito.verify(scoreSpy).increase(10);
+        Mockito.verify(scoreSpy,atMost(1)).increase(10);
+        Mockito.verify(scoreSpy,atLeast(1)).increase(10);
 
     }
 
     @Test
     public void when_apartment_ad_has_description_text_size_is_equal_or_greater_than_50_should_add_30_points(){
-        AdVO ad = new AdVO(1,TypologyVO.PISO,
+        AdVO noImageAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 this.scoreSpy,
-                new DateVO());
-        computeAdPoints.compute(ad);
+                new IrrelevantSinceVO());
+        computeAdPoints.computeDescriptionScore(noImageAd);
 
-        Mockito.verify(scoreSpy).increase(30);
+        Mockito.verify(scoreSpy,atMost(1)).increase(30);
+        Mockito.verify(scoreSpy,atLeast(1)).increase(30);
     }
 
     @Test
     public void when_chalet_ad_has_description_text_size_greater_than_50_should_add_20_points(){
-        AdVO ad = new AdVO(1,TypologyVO.CHALET,
+        AdVO noImageAd = new AdVO(1,TypologyVO.CHALET,
                 new DescriptionVO(GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 this.scoreSpy,
-                new DateVO());
-        computeAdPoints.compute(ad);
+                new IrrelevantSinceVO());
+        computeAdPoints.computeDescriptionScore(noImageAd);
 
-        Mockito.verify(scoreSpy).increase(20);
+        Mockito.verify(scoreSpy,atLeast(1)).increase(20);
+        Mockito.verify(scoreSpy,atMost(1)).increase(20);
     }
 
     @Test
     public void should_ad_5_points_per_description_text_keyword_match(){
-        AdVO ad = new AdVO(1,TypologyVO.CHALET,
+        AdVO noImgAd = new AdVO(1,TypologyVO.CHALET,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático"),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 this.scoreSpy,
-                new DateVO());
+                new IrrelevantSinceVO());
 
-        computeAdPoints.compute(ad);
+        computeAdPoints.computeDescriptionScore(noImgAd);
 
-        Mockito.verify(scoreSpy, atMost(5)).increase(5);
+        Mockito.verify(scoreSpy,atMost(1)).increase(25);
+        Mockito.verify(scoreSpy,atLeast(1)).increase(25);
 
     }
 
@@ -259,12 +269,14 @@ public class RankingTest {
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático "+FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 this.scoreSpy,
-                new DateVO(),
+                new IrrelevantSinceVO(),
                 picture);
 
-        computeAdPoints.compute(ad);
+        computeAdPoints.computeCompleteness(ad);
 
-        assertEquals(120,ad.getScore().value());
+        Mockito.verify(scoreSpy,atMost(1)).increase(40);
+        Mockito.verify(scoreSpy,atLeast(1)).increase(40);
+
     }
 
     @Test
@@ -276,12 +288,14 @@ public class RankingTest {
                         new HouseSizeVO(100L),
                         new GardenSizeVO(100L),
                         this.scoreSpy,
-                        new DateVO(),
+                        new IrrelevantSinceVO(),
                         picture);
 
-        computeAdPoints.compute(ad);
+        computeAdPoints.computeCompleteness(ad);
 
-        assertEquals(110,ad.getScore().value());
+        Mockito.verify(scoreSpy,atLeast(1)).increase(40);
+        Mockito.verify(scoreSpy,atMost(1)).increase(40);
+
     }
 
     @Test
@@ -291,13 +305,16 @@ public class RankingTest {
                 new AdVO(1,TypologyVO.GARAJE,
                         new DescriptionVO(""),
                         new HouseSizeVO(100L),
+                        new GardenSizeVO(0L),
                         this.scoreSpy,
-                        new DateVO(),
+                        new IrrelevantSinceVO(),
                         picture);
 
-        computeAdPoints.compute(ad);
+        computeAdPoints.computeCompleteness(ad);
 
-        assertEquals(60,ad.getScore().value());
+        Mockito.verify(scoreSpy,atLeast(1)).increase(40);
+        Mockito.verify(scoreSpy,atMost(1)).increase(40);
+
     }
 
 }

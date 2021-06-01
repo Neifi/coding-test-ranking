@@ -1,6 +1,5 @@
 package com.idealista.domain.repository;
 
-import com.idealista.domain.ad.AdVO;
 import com.idealista.domain.picture.PictureVO;
 
 import java.util.List;

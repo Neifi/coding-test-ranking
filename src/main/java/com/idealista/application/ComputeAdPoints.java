@@ -8,25 +8,20 @@ import com.idealista.domain.picture.QualityVO;
 public class ComputeAdPoints {
 
     public void compute(AdVO ad) {
-        computeImageScore(ad);
-        computeDescriptionScore(ad);
-        computeCompleteness(ad);
+
     }
 
-    private void computeCompleteness(AdVO ad) {
+    public void computeCompleteness(AdVO ad) {
         if(TypologyVO.PISO.equals(ad.getTypology())) {
-            if (ad.getDescription().getWords().size() > 0
-                    && ad.getPictures() != null
-                    && ad.getHouseSize().value() > 0
-            ) {
+            if (checkCompleteness(ad)) {
                 ad.getScore().increase(40);
             }
         }
         if(TypologyVO.CHALET.equals(ad.getTypology())) {
             if (ad.getDescription().getWords().size() > 0
-                    && ad.getPictures() != null
-                    && ad.getHouseSize().value() > 0
-                    && ad.getGardenSize().value() > 0
+                    && !ad.getPictures().isEmpty()
+                    && !ad.getHouseSize().isEmpty()
+                    && !ad.getGardenSize().isEmpty()
             ) {
                 ad.getScore().increase(40);
             }
@@ -39,7 +34,24 @@ public class ComputeAdPoints {
         }
     }
 
-    private void computeDescriptionScore(AdVO ad) {
+    private boolean checkCompleteness(AdVO ad) {
+        boolean isComplete = !ad.getDescription().getWords().isEmpty()
+                    && !ad.getPictures().isEmpty()
+                    && !ad.getHouseSize().isEmpty();
+
+
+        if(TypologyVO.CHALET.equals(ad.getTypology())){
+            return isComplete && !ad.getGardenSize().isEmpty();
+        }
+
+        if(TypologyVO.GARAJE.equals(ad.getTypology())){
+            return ad.getPictures().isEmpty() && !ad.getHouseSize().isEmpty();
+        }
+
+        return isComplete;
+    }
+
+    public void computeDescriptionScore(AdVO ad) {
         int descriptionLength = ad.getDescription().getWords().size();
 
         if (descriptionLength > 0) {
@@ -82,8 +94,8 @@ public class ComputeAdPoints {
         return descriptionLength >= initialSize && descriptionLength <= endSize;
     }
 
-    private void computeImageScore(AdVO ad) {
-        if (ad.getPictures() == null) {
+    public void computeImageScore(AdVO ad) {
+        if (ad.getPictures().isEmpty()) {
             ad.getScore().decrease(10);
             return;
         }
