@@ -17,7 +17,7 @@ public class inMemoryAdRepositoryImpl implements AdRepository {
 
     @Override
     public AdVO findById(Integer id) {
-        return new AdVO();
+        return null;
     }
 
     //TODO crea los métodos que necesites

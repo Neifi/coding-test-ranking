@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class DescriptionVO {
 
     private String text;
-    private int descriptionLength;
+    private final int descriptionLength;
     private List<String> words = new ArrayList<>();
     public DescriptionVO() {
         this.descriptionLength = 0;
@@ -20,13 +20,17 @@ public class DescriptionVO {
 
     public DescriptionVO(String desc) {
         if (desc.length() > 0) {
-            this.words = Stream.of(desc)
-                    .map(w -> w.split("(?U)[^\\p{Alpha}0-9']+"))
-                    .flatMap(Arrays::stream)
-                    .collect(Collectors.toList());
+            setWords(desc);
             this.text = desc;
         }
         this.descriptionLength = desc.length();
+    }
+
+    private void setWords(String desc) {
+        this.words = Stream.of(desc)
+                .map(w -> w.split("(?U)[^\\p{Alpha}0-9']+"))
+                .flatMap(Arrays::stream)
+                .collect(Collectors.toList());
     }
 
     public boolean isEmpty(){

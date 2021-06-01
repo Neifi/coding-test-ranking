@@ -4,13 +4,13 @@ import java.util.Date;
 
 public class IrrelevantSinceVO {
 
-    private Date date;
+    private final Date date;
 
     public IrrelevantSinceVO(Date date) {
         this.date = date;
     }
 
-    public IrrelevantSinceVO() {
-
+    public Date getDate() {
+        return this.date;
     }
 }

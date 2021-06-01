@@ -1,22 +1,30 @@
-package com.idealista.application;
+package com.idealista.domain.rating;
 
 import com.idealista.domain.ad.AdVO;
 import com.idealista.domain.ad.TypologyVO;
 import com.idealista.domain.picture.PictureVO;
 import com.idealista.domain.picture.QualityVO;
 
+import java.util.List;
+
 public class ComputeAdPoints {
 
-    public void compute(AdVO ad) {
-
+    public void computeAdCompleteness(AdVO ad) {
+        computeApartmentCompleteness(ad);
+        computeChaletCompleteness(ad);
+        computeGarageCompleteness(ad);
     }
 
-    public void computeCompleteness(AdVO ad) {
-        if(TypologyVO.PISO.equals(ad.getTypology())) {
-            if (checkCompleteness(ad)) {
+    private void computeGarageCompleteness(AdVO ad) {
+        if(TypologyVO.GARAJE.equals(ad.getTypology())) {
+            if (ad.getPictures() != null && ad.getHouseSize().value() > 0
+            ) {
                 ad.getScore().increase(40);
             }
         }
+    }
+
+    private void computeChaletCompleteness(AdVO ad) {
         if(TypologyVO.CHALET.equals(ad.getTypology())) {
             if (ad.getDescription().getWords().size() > 0
                     && !ad.getPictures().isEmpty()
@@ -26,16 +34,18 @@ public class ComputeAdPoints {
                 ad.getScore().increase(40);
             }
         }
-        if(TypologyVO.GARAJE.equals(ad.getTypology())) {
-            if (ad.getPictures() != null && ad.getHouseSize().value() > 0
-            ) {
+    }
+
+    private void computeApartmentCompleteness(AdVO ad) {
+        if(TypologyVO.PISO.equals(ad.getTypology())) {
+            if (checkCompleteness(ad)) {
                 ad.getScore().increase(40);
             }
         }
     }
 
     private boolean checkCompleteness(AdVO ad) {
-        boolean isComplete = !ad.getDescription().getWords().isEmpty()
+        boolean isComplete = !ad.getDescription().isEmpty()
                     && !ad.getPictures().isEmpty()
                     && !ad.getHouseSize().isEmpty();
 
@@ -53,8 +63,8 @@ public class ComputeAdPoints {
 
     public void computeDescriptionScore(AdVO ad) {
         int descriptionLength = ad.getDescription().getWords().size();
-
         if (descriptionLength > 0) {
+            List<String> descriptionWords = ad.getDescription().getWords();
 
             int initialSize = 20;
             int endSize = 49;
@@ -73,16 +83,20 @@ public class ComputeAdPoints {
             }
 
             //TODO keyword repository?
-            long words = ad.getDescription().getWords().stream().filter(w -> w.equalsIgnoreCase("Luminoso") ||
-                            w.equalsIgnoreCase("Nuevo")
-                            || w.equalsIgnoreCase("Céntrico")
-                            || w.equalsIgnoreCase("Reformado")
-                            || w.equalsIgnoreCase("Ático")).count();
+            long words = getDescriptionKeywords(descriptionWords);
 
             ad.getScore().increase(5 * (int)words);
 
 
         }
+    }
+
+    private long getDescriptionKeywords(List<String> descriptionWords) {
+        return descriptionWords.stream().filter(w -> w.equalsIgnoreCase("Luminoso") ||
+                        w.equalsIgnoreCase("Nuevo")
+                        || w.equalsIgnoreCase("Céntrico")
+                        || w.equalsIgnoreCase("Reformado")
+                        || w.equalsIgnoreCase("Ático")).count();
     }
 
     private boolean descriptionWordSizeIsGreaterThan(int descriptionLength, int maxSize) {
@@ -104,7 +118,6 @@ public class ComputeAdPoints {
                 ad.getScore().increase(20);
             } else {
                 ad.getScore().increase(10);
-
             }
         }
     }

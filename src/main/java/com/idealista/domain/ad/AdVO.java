@@ -19,9 +19,7 @@ public class AdVO {
     private ScoreVO score;
     private IrrelevantSinceVO irrelevantSince;
 
-    public AdVO() {}
-
-    public AdVO(Integer id, TypologyVO typology, DescriptionVO description, HouseSizeVO houseSize, GardenSizeVO gardenSize, ScoreVO score, IrrelevantSinceVO irrelevantSince, PictureVO ...pictures) {
+    public AdVO(Integer id, TypologyVO typology, DescriptionVO description, HouseSizeVO houseSize, GardenSizeVO gardenSize, ScoreVO score, PictureVO ...pictures) {
         if(pictures.length == 0){
             this.pictures = Collections.emptyList();
         }
@@ -32,10 +30,9 @@ public class AdVO {
         this.houseSize = houseSize;
         this.gardenSize = gardenSize;
         this.score = score;
-        this.irrelevantSince = irrelevantSince;
 
     }
-    public AdVO(Integer id, TypologyVO typology, DescriptionVO description, HouseSizeVO houseSize, ScoreVO score, IrrelevantSinceVO irrelevantSince, PictureVO ...pictures) {
+    public AdVO(Integer id, TypologyVO typology, DescriptionVO description, HouseSizeVO houseSize, ScoreVO score, PictureVO ...pictures) {
         if(pictures.length == 0){
             this.pictures = Collections.emptyList();
         }
@@ -46,10 +43,10 @@ public class AdVO {
         this.houseSize = houseSize;
         this.gardenSize = new GardenSizeVO(0L);
         this.score = score;
-        this.irrelevantSince = irrelevantSince;
 
     }
 
-
-
+    public void setIrrelevantSince(IrrelevantSinceVO irrelevantSince) {
+        this.irrelevantSince = irrelevantSince;
+    }
 }

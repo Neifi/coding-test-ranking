@@ -47,7 +47,31 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-parent</artifactId>
+            <version>1.1.10</version>
+            <type>pom</type>
+        </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.1.10</version>
+                <configuration>
+                    <targetClasses>
+                        <param>com.idealista.test.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>com.idealista.test.*</param>
+                    </targetTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

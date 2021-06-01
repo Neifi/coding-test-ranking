@@ -1,7 +1,8 @@
 package UnitTest;
 
-import com.idealista.application.ComputeAdPoints;
+import com.idealista.domain.rating.ComputeAdPoints;
 import com.idealista.application.ListRelevantAds;
+import com.idealista.application.SetRelevance;
 import com.idealista.domain.ad.*;
 import com.idealista.domain.picture.PictureVO;
 import com.idealista.domain.picture.QualityVO;
@@ -12,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -28,20 +29,88 @@ public class RankingTest {
     private AdRepository adRepository;
 
     private ListRelevantAds listRelevantAds;
-
+    private IrrelevantSinceVO irrelevantSinceVO;
+    private ScoreVO scoreSpy;
+    private IrrelevantSinceVO irrelevantSinceVOSpy;
+    private SetRelevance setRelevance = new SetRelevance();
     private final ComputeAdPoints computeAdPoints = new ComputeAdPoints();
 
     private final String TWENTY_WORDS_DESCRIPTION_TEXT = "Lorem ipsum dolor sit amet consectetur adipiscing elit, ridiculus cum felis ante malesuada viverra, suscipit natoque sollicitudin pulvinar himenaeos molestie.";
     private final String FIFTY_WORDS_DESCRIPTION_TEXT = "Lorem ipsum dolor sit amet consectetur adipiscing elit tellus proin, aenean nascetur dictumst ullamcorper consequat orci primis felis congue, facilisi sem aliquet sapien quis fermentum urna varius. Sociosqu enim donec dapibus auctor pretium hendrerit tempor scelerisque, justo inceptos morbi faucibus convallis pharetra nibh, cum tristique elementum tincidunt dictum massa condimentum.";
     private final String GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT = " Lorem ipsum dolor sit amet consectetur adipiscing elit odio, mus massa congue mollis netus ultricies accumsan diam cras, egestas et etiam nibh cursus commodo ut. Vulputate non hendrerit eleifend condimentum, duis proin lacus orci, dapibus leo viverra. Velit maecenas nullam urna lectus pellentesque primis mauris augue, ad aliquam erat ultrices ante ridiculus facilisi, ullamcorper interdum a inceptos eros nunc magnis.";
-    private ScoreVO scoreSpy;
 
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
+
         listRelevantAds = new ListRelevantAds(adRepository);
+
         ScoreVO score = new ScoreVO(0);
         scoreSpy = Mockito.spy(score);
+    }
+
+    @Test
+    public void should_list_ads_with_score_greater_than_40(){
+        AdVO adWithScoreOf30 = new AdVO(1,TypologyVO.PISO,
+                new DescriptionVO(),
+                new HouseSizeVO(100L),
+                new ScoreVO(30),
+                
+                new PictureVO());
+
+
+        AdVO adWithScoreOf40 = new AdVO(1,TypologyVO.PISO,
+                new DescriptionVO(),
+                new HouseSizeVO(100L),
+                new GardenSizeVO(100L),
+                new ScoreVO(40),
+                
+                new PictureVO());
+
+        AdVO adWithScoreOf70 = new AdVO(1,TypologyVO.PISO,
+                new DescriptionVO(),
+                new HouseSizeVO(100L),
+                new GardenSizeVO(100L),
+                new ScoreVO(70),
+                
+                new PictureVO());
+
+        AdVO adWithScoreOf80 = new AdVO(1,TypologyVO.PISO,
+                new DescriptionVO(),
+                new HouseSizeVO(100L),
+                new GardenSizeVO(100L),
+                new ScoreVO(80),
+                
+                new PictureVO());
+
+        List<AdVO> ads = new ArrayList<>();
+        ads.add(adWithScoreOf30);
+        ads.add(adWithScoreOf40);
+        ads.add(adWithScoreOf70);
+        ads.add(adWithScoreOf80);
+
+        when(adRepository.findAll()).thenReturn(ads);
+
+        List<AdVO> adsInOrder = listRelevantAds.getAdsInOrder();
+
+        assertEquals(2,adsInOrder.size());
+        assertEquals(adWithScoreOf80,adsInOrder.get(0));
+        assertEquals(adWithScoreOf70,adsInOrder.get(1));
+    }
+
+    @Test
+    public void should_set_irrelevant_since_date_when_ad_score_reach_irrelevantThreshold(){
+        AdVO ad = new AdVO(1,TypologyVO.PISO,
+                new DescriptionVO(),
+                new HouseSizeVO(100L),
+                new GardenSizeVO(100L),
+                new ScoreVO(40),
+                new PictureVO());
+
+        setRelevance.set(ad);
+
+        assertNotNull(ad.getIrrelevantSince());
+
     }
 
     @Test
@@ -51,7 +120,6 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 new ScoreVO(100),
-                new IrrelevantSinceVO(),
                 new PictureVO());
 
         AdVO adTwo = new AdVO(1,TypologyVO.PISO,
@@ -59,34 +127,26 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 new ScoreVO(70),
-                new IrrelevantSinceVO(),
                 new PictureVO());
 
         AdVO adThree = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(50),
-                new IrrelevantSinceVO(),
-                new PictureVO());
-        AdVO adFour = new AdVO(1,TypologyVO.PISO,
-                new DescriptionVO(),
-                new HouseSizeVO(100L),
-                new GardenSizeVO(100L),
-                new ScoreVO(40),
-                new IrrelevantSinceVO(),
+                new ScoreVO(60),
+                
                 new PictureVO());
         AdVO lessRelevantAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                new ScoreVO(10),
-                new IrrelevantSinceVO(),
+                new ScoreVO(50),
+                
                 new PictureVO());
+
         List<AdVO> ads = new ArrayList<>();
 
         ads.add(lessRelevantAd);
-        ads.add(adFour);
         ads.add(adThree);
         ads.add(mostRelevantAd);
         ads.add(adTwo);
@@ -97,8 +157,7 @@ public class RankingTest {
         assertEquals(relevantAds.get(0),mostRelevantAd);
         assertEquals(relevantAds.get(1),adTwo);
         assertEquals(relevantAds.get(2),adThree);
-        assertEquals(relevantAds.get(3),adFour);
-        assertEquals(relevantAds.get(4),lessRelevantAd);
+        assertEquals(relevantAds.get(3),lessRelevantAd);
 
 
     }
@@ -121,9 +180,7 @@ public class RankingTest {
                 new DescriptionVO(),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                scoreSpy,
-                new IrrelevantSinceVO());
-
+                scoreSpy);
         ComputeAdPoints computeAdPoints = new ComputeAdPoints();
         computeAdPoints.computeImageScore(noImageAd);
 
@@ -139,7 +196,7 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 scoreSpy,
-                new IrrelevantSinceVO(),
+                
                 picture);
 
         ComputeAdPoints computeAdPoints = new ComputeAdPoints();
@@ -158,7 +215,7 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 this.scoreSpy,
-                new IrrelevantSinceVO(),
+                
                 picture);
 
 
@@ -187,7 +244,7 @@ public class RankingTest {
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
                 this.scoreSpy,
-                new IrrelevantSinceVO(),
+                
                 picture);
 
         computeAdPoints.computeDescriptionScore(withImageAd);
@@ -202,9 +259,7 @@ public class RankingTest {
         AdVO noImageAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(TWENTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
-                new GardenSizeVO(100L),
-                this.scoreSpy,
-                new IrrelevantSinceVO());
+                this.scoreSpy);
         computeAdPoints.computeDescriptionScore(noImageAd);
 
         Mockito.verify(scoreSpy,atMost(1)).increase(10);
@@ -217,9 +272,7 @@ public class RankingTest {
         AdVO noImageAd = new AdVO(1,TypologyVO.PISO,
                 new DescriptionVO(FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
-                new GardenSizeVO(100L),
-                this.scoreSpy,
-                new IrrelevantSinceVO());
+                this.scoreSpy);
         computeAdPoints.computeDescriptionScore(noImageAd);
 
         Mockito.verify(scoreSpy,atMost(1)).increase(30);
@@ -232,8 +285,7 @@ public class RankingTest {
                 new DescriptionVO(GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                this.scoreSpy,
-                new IrrelevantSinceVO());
+                this.scoreSpy);
         computeAdPoints.computeDescriptionScore(noImageAd);
 
         Mockito.verify(scoreSpy,atLeast(1)).increase(20);
@@ -246,8 +298,7 @@ public class RankingTest {
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático"),
                 new HouseSizeVO(100L),
                 new GardenSizeVO(100L),
-                this.scoreSpy,
-                new IrrelevantSinceVO());
+                this.scoreSpy);
 
         computeAdPoints.computeDescriptionScore(noImgAd);
 
@@ -269,10 +320,10 @@ public class RankingTest {
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático "+FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100L),
                 this.scoreSpy,
-                new IrrelevantSinceVO(),
+                
                 picture);
 
-        computeAdPoints.computeCompleteness(ad);
+        computeAdPoints.computeAdCompleteness(ad);
 
         Mockito.verify(scoreSpy,atMost(1)).increase(40);
         Mockito.verify(scoreSpy,atLeast(1)).increase(40);
@@ -288,10 +339,10 @@ public class RankingTest {
                         new HouseSizeVO(100L),
                         new GardenSizeVO(100L),
                         this.scoreSpy,
-                        new IrrelevantSinceVO(),
+                        
                         picture);
 
-        computeAdPoints.computeCompleteness(ad);
+        computeAdPoints.computeAdCompleteness(ad);
 
         Mockito.verify(scoreSpy,atLeast(1)).increase(40);
         Mockito.verify(scoreSpy,atMost(1)).increase(40);
@@ -307,14 +358,18 @@ public class RankingTest {
                         new HouseSizeVO(100L),
                         new GardenSizeVO(0L),
                         this.scoreSpy,
-                        new IrrelevantSinceVO(),
+                        
                         picture);
 
-        computeAdPoints.computeCompleteness(ad);
+        computeAdPoints.computeAdCompleteness(ad);
 
         Mockito.verify(scoreSpy,atLeast(1)).increase(40);
         Mockito.verify(scoreSpy,atMost(1)).increase(40);
 
     }
+
+
+
+
 
 }
