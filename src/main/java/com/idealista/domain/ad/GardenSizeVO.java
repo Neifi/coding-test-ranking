@@ -1,17 +1,21 @@
 package com.idealista.domain.ad;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class GardenSizeVO {
 
-    private Long size;
+    private int size = 0;
 
-    public GardenSizeVO(Long size) {
+    public GardenSizeVO(Integer size) {
+        if (size==null) return;
         if(size < 0){
             throw new RuntimeException("Garden size cannot be less than zero");
         }
         this.size = size;
     }
 
-    public Long value() {
+    public Integer value() {
         return size;
     }
 

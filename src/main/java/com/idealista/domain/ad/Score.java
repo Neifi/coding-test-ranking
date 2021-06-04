@@ -1,10 +1,13 @@
 package com.idealista.domain.ad;
 
-public class ScoreVO {
+public class Score {
 
-    private int score;
+    private final int MAX_SCORE = 100;
 
-    public ScoreVO(int value) {
+    private int score = 0;
+
+    public Score(Integer value) {
+        if (value==null) return;
         if(value < 0){
             throw new RuntimeException("score cannot be less than zero");
         }
@@ -25,6 +28,15 @@ public class ScoreVO {
         if(value < 0){
             throw new RuntimeException("value cannot be less than zero");
         }
+        if(score == 100){
+            return;
+        }
+        if(score+value > MAX_SCORE){
+            this.score += (value-score);
+            return;
+        }
+
         this.score += value;
+
     }
 }

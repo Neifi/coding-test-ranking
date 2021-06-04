@@ -1,5 +1,6 @@
 package com.idealista.domain.ad;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -9,16 +10,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter
+@EqualsAndHashCode
 public class DescriptionVO {
 
-    private String text;
-    private final int descriptionLength;
+    private String text = "";
+    private int descriptionLength = 0;
     private List<String> words = new ArrayList<>();
-    public DescriptionVO() {
-        this.descriptionLength = 0;
-    }
 
     public DescriptionVO(String desc) {
+        if(desc == null) return;
         if (desc.length() > 0) {
             setWords(desc);
             this.text = desc;

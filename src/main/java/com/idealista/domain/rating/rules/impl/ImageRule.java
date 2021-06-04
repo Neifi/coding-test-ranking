@@ -1,25 +1,31 @@
-package com.idealista.domain.rating.rules;
+package com.idealista.domain.rating.rules.impl;
 
 import com.idealista.domain.ad.AdVO;
 import com.idealista.domain.picture.PictureVO;
 import com.idealista.domain.picture.QualityVO;
+import com.idealista.domain.rating.rules.RatingRule;
 
-public class ImageRule{
+public class ImageRule implements RatingRule {
     private final int HD_IMAGE_POINTS = 20;
     private final int NO_HD_IMAGE_POINTS = 10;
     private final int NO_MAGE_POINTS = 10;
 
-    public void check(AdVO ad) {
+
+    private int totalPoints = 0;
+
+    public int getScore(AdVO ad) {
         if (ad.getPictures().isEmpty()) {
-            ad.getScore().decrease(NO_MAGE_POINTS);
-            return;
+                totalPoints -= NO_MAGE_POINTS;
+            return totalPoints;
         }
         for (PictureVO picture : ad.getPictures()) {
             if (QualityVO.HD.equals(picture.getQuality())) {
-                ad.getScore().increase(HD_IMAGE_POINTS);
+                totalPoints += HD_IMAGE_POINTS;
             } else {
-                ad.getScore().increase(NO_HD_IMAGE_POINTS);
+                totalPoints += NO_HD_IMAGE_POINTS;
             }
         }
+
+        return totalPoints;
     }
 }

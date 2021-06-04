@@ -11,9 +11,6 @@ public class PictureVO {
     private QualityVO quality;
 
 
-    public PictureVO() {}
-
-
     public PictureVO(Integer id, UrlVO url, QualityVO quality) {
         this.id = id;
         this.url = url;

@@ -1,10 +1,15 @@
 package com.idealista.domain.ad;
 
-import java.util.Date;
+import lombok.EqualsAndHashCode;
 
+import java.util.Date;
+@EqualsAndHashCode
 public class IrrelevantSinceVO {
 
-    private final Date date;
+    private Date date = new Date(0);
+
+    public IrrelevantSinceVO() {
+    }
 
     public IrrelevantSinceVO(Date date) {
         this.date = date;

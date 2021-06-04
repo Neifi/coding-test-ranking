@@ -2,17 +2,18 @@ package com.idealista.domain.ad;
 
 public class HouseSizeVO {
 
-    private Long size;
+    private int size = 0;
 
-    public HouseSizeVO(Long size) {
+    public HouseSizeVO(Integer size) {
+        if(size == null) return;
         if (size < 0) {
             throw new RuntimeException("House size cannot be less than zero");
         }
         this.size = size;
     }
 
-    public Long value() {
-        return size;
+    public Integer value() {
+        return this.size;
     }
 
     public boolean isEmpty() {
