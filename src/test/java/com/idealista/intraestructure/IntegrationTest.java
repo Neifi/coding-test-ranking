@@ -1,10 +1,9 @@
 package com.idealista.intraestructure;
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import com.idealista.domain.repository.AdRepository;
 import com.idealista.infrastructure.persistence.inMemoryAdRepositoryImpl;
 import com.idealista.infrastructure.services.AdService;
-import com.idealista.infrastructure.services.AdsServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class IntegrationTest {
     @Test
     public void should_retrieve_data_from_db() throws Exception {
 
-        List<AdVO> all = adRepository.findAll();
+        List<Ad> all = adRepository.findAll();
 
         assertEquals(8,all.size());
         assertEquals("CHALET",all.get(0).getTypology().name());
@@ -43,10 +42,10 @@ public class IntegrationTest {
 
     @Test
     public void should_save_all_data_to_db(){
-        List<AdVO> beforePerform = adRepository.findAll();
+        List<Ad> beforePerform = adRepository.findAll();
 
         adService.performAdRank();
-        List<AdVO> afterPerform = adRepository.findAll();
+        List<Ad> afterPerform = adRepository.findAll();
 
         assertEquals(8,afterPerform.size());
         assertEquals("CHALET",afterPerform.get(0).getTypology().name());

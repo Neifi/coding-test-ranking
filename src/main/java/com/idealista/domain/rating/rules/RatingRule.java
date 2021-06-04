@@ -1,8 +1,8 @@
 package com.idealista.domain.rating.rules;
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 
 public interface RatingRule {
 
-    int getScore(AdVO adVO);
+    int getScore(Ad ad);
 }

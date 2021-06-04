@@ -18,6 +18,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <org.projectlombok.version>1.18.20</org.projectlombok.version>
     </properties>
 
     <dependencies>
@@ -33,7 +34,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>${org.projectlombok.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -48,12 +49,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.pitest</groupId>
-            <artifactId>pitest-parent</artifactId>
-            <version>1.1.10</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>RELEASE</version>
@@ -64,19 +59,7 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.1.10</version>
-                <configuration>
-                    <targetClasses>
-                        <param>com.idealista.test.*</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>com.idealista.test.*</param>
-                    </targetTests>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 

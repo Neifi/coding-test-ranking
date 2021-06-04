@@ -1,6 +1,6 @@
 package com.idealista.application.services;
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public interface RankingService {
 
-    List<AdVO> getRelevantAds();
-    List<AdVO> getIrelevantAds();
-    void calculateScore(List<AdVO> ads);
+    List<Ad> getRelevantAds();
+    List<Ad> getIrelevantAds();
+    void calculateScore(List<Ad> ads);
 }

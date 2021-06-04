@@ -1,14 +1,14 @@
 package com.idealista.domain.repository;
 
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface AdRepository {
-    List<AdVO> findAll();
+    List<Ad> findAll();
 
-    void saveAll(List<AdVO> ads);
+    void saveAll(List<Ad> ads);
 }

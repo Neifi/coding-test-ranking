@@ -1,7 +1,7 @@
 package com.idealista.infrastructure.api;
 
 import com.idealista.application.services.RankingService;
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import com.idealista.infrastructure.mapper.Mapper;
 import com.idealista.infrastructure.mapper.impl.PublicAdMapper;
 import com.idealista.infrastructure.mapper.impl.QualityAdMapper;
@@ -27,12 +27,12 @@ public class AdsController {
     @Autowired
     public AdService adsService;
 
-    Mapper<QualityAd, AdVO> qualityAdMapper = new QualityAdMapper();
-    Mapper<PublicAd, AdVO> publicAdMapper = new PublicAdMapper();
+    Mapper<QualityAd, Ad> qualityAdMapper = new QualityAdMapper();
+    Mapper<PublicAd, Ad> publicAdMapper = new PublicAdMapper();
 
     @GetMapping("/quality")
     public ResponseEntity<List<QualityAd>> qualityListing() {
-        List<AdVO> irelevantAds = rankingService.getIrelevantAds();
+        List<Ad> irelevantAds = rankingService.getIrelevantAds();
 
         if (irelevantAds.isEmpty()) return ResponseEntity.noContent().build();
 
@@ -44,7 +44,7 @@ public class AdsController {
 
     @GetMapping("/public")
     public ResponseEntity<List<PublicAd>> publicListing() {
-        List<AdVO> relevantAds = rankingService.getRelevantAds();
+        List<Ad> relevantAds = rankingService.getRelevantAds();
 
         if (relevantAds.isEmpty()) return ResponseEntity.noContent().build();
 

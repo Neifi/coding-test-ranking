@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AdsController.class)
-public class AdControllerTest {
+public class AdEntityControllerTest {
 
     @MockBean
     RankingService rankingService;
@@ -45,19 +45,19 @@ public class AdControllerTest {
 
     @Test
     public void should_return_list_of_irrelevant_ads_with_http_status_200() throws Exception {
-        AdVO adTwo = new AdVO(2, Typology.CHALET,
+        Ad adTwo = new Ad(2, Typology.CHALET,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
                 new GardenSizeVO(100),
                 new Score(30),
                 Collections.emptyList());
-        AdVO adThree = new AdVO(3, Typology.FLAT,
+        Ad adThree = new Ad(3, Typology.FLAT,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
                 new Score(40),
                 Collections.emptyList());
 
-        Mockito.when(rankingService.getIrelevantAds()).thenReturn(Arrays.<AdVO>asList(adTwo, adThree));
+        Mockito.when(rankingService.getIrelevantAds()).thenReturn(Arrays.<Ad>asList(adTwo, adThree));
 
         mockMvc.perform(get("/ad/quality")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -72,18 +72,18 @@ public class AdControllerTest {
 
     @Test
     public void should_return_list_of_relevant_ads_with_http_status_200() throws Exception {
-        AdVO adTwo = new AdVO(2, Typology.CHALET,
+        Ad adTwo = new Ad(2, Typology.CHALET,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
                 new GardenSizeVO(100),
                 new Score(100),
                 Collections.emptyList());
-        AdVO adThree = new AdVO(3, Typology.FLAT,
+        Ad adThree = new Ad(3, Typology.FLAT,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
                 new Score(90),
             Collections.emptyList());
-        Mockito.when(rankingService.getRelevantAds()).thenReturn(Arrays.<AdVO>asList(adTwo, adThree));
+        Mockito.when(rankingService.getRelevantAds()).thenReturn(Arrays.<Ad>asList(adTwo, adThree));
 
         mockMvc.perform(get("/ad/public")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -110,19 +110,19 @@ public class AdControllerTest {
 
     @Test
     public void should_calculate_ad_ranking_and_response_with_200() throws Exception {
-        AdVO adTwo = new AdVO(2, Typology.CHALET,
+        Ad adTwo = new Ad(2, Typology.CHALET,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
                 new GardenSizeVO(100),
                 new Score(100),
                 Collections.emptyList());
-        AdVO adThree = new AdVO(3, Typology.FLAT,
+        Ad adThree = new Ad(3, Typology.FLAT,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
                 new Score(90),
                 Collections.emptyList());
 
-        List<AdVO> ads = Arrays.<AdVO>asList(adTwo, adThree);
+        List<Ad> ads = Arrays.<Ad>asList(adTwo, adThree);
         Mockito.when(repository.findAll()).thenReturn(ads);
         Mockito.doNothing().when(repository).saveAll(ads);
 

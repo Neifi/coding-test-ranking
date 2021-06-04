@@ -1,11 +1,11 @@
 package com.idealista.infrastructure.persistence;
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import com.idealista.domain.picture.PictureVO;
 import com.idealista.domain.repository.AdRepository;
 import com.idealista.domain.repository.PictureRepository;
 import com.idealista.infrastructure.mapper.impl.AdEntityMapper;
-import com.idealista.infrastructure.persistence.model.Ad;
+import com.idealista.infrastructure.persistence.model.AdEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,21 +24,21 @@ public class inMemoryAdRepositoryImpl implements AdRepository {
     private PictureRepository pictureRepository = new InMemoryPictureRepository();
 
     @Override
-    public List<AdVO> findAll() {
+    public List<Ad> findAll() {
         List<PictureVO>pictureVOS = new ArrayList<>();
-        List<Ad> ads = inMemoryDB.getAd();
-        List<AdVO> adVOList = new ArrayList<>();
-        for (Ad ad:ads) {
+        List<AdEntity> ads = inMemoryDB.getAd();
+        List<Ad> adList = new ArrayList<>();
+        for (AdEntity ad:ads) {
          pictureVOS = pictureRepository.findAll(ad.getPictureUrls());
          mapper.setPictures(pictureVOS);
-         adVOList.add(mapper.mapToSource(ad));
+         adList.add(mapper.mapToSource(ad));
         }
 
-        return adVOList;
+        return adList;
     }
 
     @Override
-    public void saveAll(List<AdVO> ads) {
+    public void saveAll(List<Ad> ads) {
         inMemoryDB.saveAll(ads.stream()
                 .map(mapper::mapToDestination)
                 .collect(Collectors.toList()));

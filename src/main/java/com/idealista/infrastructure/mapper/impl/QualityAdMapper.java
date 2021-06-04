@@ -1,6 +1,6 @@
 package com.idealista.infrastructure.mapper.impl;
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import com.idealista.domain.picture.PictureVO;
 import com.idealista.domain.picture.UrlVO;
 import com.idealista.infrastructure.api.QualityAd;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
 @Component
-public class QualityAdMapper implements Mapper<QualityAd,AdVO> {
+public class QualityAdMapper implements Mapper<QualityAd, Ad> {
 
     @Override
-    public QualityAd mapToDestination(AdVO source) {
+    public QualityAd mapToDestination(Ad source) {
         QualityAd qualityAd = new QualityAd();
         qualityAd.setId(source.getId());
         qualityAd.setTypology(source.getTypology().name());
@@ -30,7 +30,7 @@ public class QualityAdMapper implements Mapper<QualityAd,AdVO> {
     }
 
     @Override
-    public AdVO mapToSource(QualityAd source) {
+    public Ad mapToSource(QualityAd source) {
         return null;
     }
 }

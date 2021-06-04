@@ -3,13 +3,15 @@ package com.idealista.domain.ad;
 import com.idealista.domain.picture.PictureVO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Getter
-@EqualsAndHashCode
-public class AdVO {
+@Setter
+public class Ad {
 
     private final int INVALID_THRESHOLD = 40;
 
@@ -22,7 +24,7 @@ public class AdVO {
     private Score score;
     private IrrelevantSinceVO irrelevantSince;
 
-    public AdVO(Integer id, Typology typology, DescriptionVO description, HouseSizeVO houseSize, GardenSizeVO gardenSize, Score score, List<PictureVO> pictures) {
+    public Ad(Integer id, Typology typology, DescriptionVO description, HouseSizeVO houseSize, GardenSizeVO gardenSize, Score score, List<PictureVO> pictures) {
 
         this.id = id;
         this.typology = typology;
@@ -34,7 +36,7 @@ public class AdVO {
         this.irrelevantSince = new IrrelevantSinceVO();
     }
 
-    public AdVO(Integer id, Typology typology, DescriptionVO description, HouseSizeVO houseSize, Score score, List<PictureVO> pictures) {
+    public Ad(Integer id, Typology typology, DescriptionVO description, HouseSizeVO houseSize, Score score, List<PictureVO> pictures) {
 
         this.id = id;
         this.typology = typology;
@@ -47,7 +49,7 @@ public class AdVO {
 
     }
 
-    public AdVO(Integer id, Typology typology, HouseSizeVO houseSize, Score score, List<PictureVO> pictures) {
+    public Ad(Integer id, Typology typology, HouseSizeVO houseSize, Score score, List<PictureVO> pictures) {
 
         this.id = id;
         this.typology = typology;
@@ -69,13 +71,13 @@ public class AdVO {
     }
 
     public boolean isComplete() {
-        if (Typology.GARAGE.equals(this.getTypology())) {
+        if (Typology.GARAGE.equals(this.typology)) {
             return isGarageComplete();
         }
-        if (Typology.CHALET.equals(this.getTypology())) {
+        if (Typology.CHALET.equals(this.typology)) {
             return isChaletComplete();
         }
-        if (Typology.FLAT.equals(this.getTypology())) {
+        if (Typology.FLAT.equals(this.typology)) {
             return isApartmentComplete();
         }
 
@@ -83,21 +85,21 @@ public class AdVO {
     }
 
     private boolean isGarageComplete() {
-        return !this.getPictures().isEmpty() && !this.getHouseSize().isEmpty();
+        return !this.pictures.isEmpty() && !this.houseSize.isEmpty();
 
     }
 
     private boolean isChaletComplete() {
-        return !this.getDescription().isEmpty()
-                && !this.getPictures().isEmpty()
-                && !this.getHouseSize().isEmpty()
-                && !this.getGardenSize().isEmpty();
+        return !this.description.isEmpty()
+                && !this.pictures.isEmpty()
+                && !this.houseSize.isEmpty()
+                && !this.gardenSize.isEmpty();
     }
 
     private boolean isApartmentComplete() {
-        return !this.getDescription().isEmpty()
-                && !this.getPictures().isEmpty()
-                && !this.getHouseSize().isEmpty();
+        return !this.description.isEmpty()
+                && !this.pictures.isEmpty()
+                && !this.houseSize.isEmpty();
 
     }
 

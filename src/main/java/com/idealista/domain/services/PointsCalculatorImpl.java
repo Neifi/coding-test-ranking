@@ -1,6 +1,6 @@
 package com.idealista.domain.services;
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import com.idealista.domain.ad.IrrelevantSinceVO;
 import com.idealista.domain.rating.rules.impl.CompletenessRule;
 import com.idealista.domain.rating.rules.impl.DescriptionRule;
@@ -16,12 +16,12 @@ public class PointsCalculatorImpl implements PointsCalculator {
     private RatingRule ratingRule;
 
 
-    public void calculateDescriptionPoints(AdVO ad) {
+    public void calculateDescriptionPoints(Ad ad) {
         ratingRule = new DescriptionRule();
         ad.getScore().increase(ratingRule.getScore(ad));
     }
 
-    public void calculateCompletenessPoints(AdVO ad) {
+    public void calculateCompletenessPoints(Ad ad) {
         ratingRule = new CompletenessRule();
         int score = ratingRule.getScore(ad);
         if (score == 0) {
@@ -31,7 +31,7 @@ public class PointsCalculatorImpl implements PointsCalculator {
         ad.getScore().increase(score);
     }
 
-    public void calculateImagePoints(AdVO ad) {
+    public void calculateImagePoints(Ad ad) {
         ratingRule = new ImageRule();
         int imageRuleScore = ratingRule.getScore(ad);
         if (imageRuleScore < 0) {
@@ -41,17 +41,17 @@ public class PointsCalculatorImpl implements PointsCalculator {
         }
     }
 
-    public void setRelevance(AdVO ad) {
+    public void setRelevance(Ad ad) {
         if (ad.isRelevant()) {
-            ad.setIrrelevantSince(new IrrelevantSinceVO(new Date()));
+            ad.setIrrelevantSince(new IrrelevantSinceVO());
             return;
         }
-        ad.setIrrelevantSince(new IrrelevantSinceVO());
+        ad.setIrrelevantSince(new IrrelevantSinceVO(new Date()));
 
     }
 
     @Override
-    public AdVO calculate(AdVO ad) {
+    public Ad calculate(Ad ad) {
         calculateDescriptionPoints(ad);
         calculateImagePoints(ad);
         calculateCompletenessPoints(ad);

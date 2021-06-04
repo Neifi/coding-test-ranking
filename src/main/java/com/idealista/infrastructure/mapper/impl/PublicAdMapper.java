@@ -1,6 +1,6 @@
 package com.idealista.infrastructure.mapper.impl;
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import com.idealista.domain.picture.PictureVO;
 import com.idealista.domain.picture.UrlVO;
 import com.idealista.infrastructure.api.PublicAd;
@@ -8,10 +8,10 @@ import com.idealista.infrastructure.mapper.Mapper;
 
 import java.util.stream.Collectors;
 
-public class PublicAdMapper implements Mapper<PublicAd, AdVO> {
+public class PublicAdMapper implements Mapper<PublicAd, Ad> {
 
     @Override
-    public PublicAd mapToDestination(AdVO source) {
+    public PublicAd mapToDestination(Ad source) {
         PublicAd qualityAd = new PublicAd();
         qualityAd.setId(source.getId());
         qualityAd.setTypology(source.getTypology().name());
@@ -26,7 +26,7 @@ public class PublicAdMapper implements Mapper<PublicAd, AdVO> {
     }
 
     @Override
-    public AdVO mapToSource(PublicAd source) {
+    public Ad mapToSource(PublicAd source) {
         return null;
     }
 }

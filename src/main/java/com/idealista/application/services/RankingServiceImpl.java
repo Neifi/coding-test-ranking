@@ -3,15 +3,13 @@ package com.idealista.application.services;
 
 import com.idealista.application.ListIrrelevantAds;
 import com.idealista.application.ListRelevantAds;
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import com.idealista.domain.services.PointsCalculator;
-import com.idealista.domain.services.PointsCalculatorImpl;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,18 +27,18 @@ public class RankingServiceImpl implements RankingService{
     private ListIrrelevantAds listIrrelevantAds;
 
     @Override
-    public List<AdVO> getRelevantAds() {
+    public List<Ad> getRelevantAds() {
         return listRelevantAds.getAdsInOrder();
     }
 
     @Override
-    public List<AdVO> getIrelevantAds() {
+    public List<Ad> getIrelevantAds() {
         return listIrrelevantAds.getAds();
     }
 
     @Override
-    public void calculateScore(List<AdVO> ads) {
-        for (AdVO ad:ads) {
+    public void calculateScore(List<Ad> ads) {
+        for (Ad ad:ads) {
             pointsCalculator.calculate(ad);
         }
     }

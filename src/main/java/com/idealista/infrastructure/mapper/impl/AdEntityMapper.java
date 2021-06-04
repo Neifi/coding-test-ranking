@@ -3,18 +3,18 @@ package com.idealista.infrastructure.mapper.impl;
 import com.idealista.domain.ad.*;
 import com.idealista.domain.picture.PictureVO;
 import com.idealista.infrastructure.mapper.Mapper;
-import com.idealista.infrastructure.persistence.model.Ad;
+import com.idealista.infrastructure.persistence.model.AdEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AdEntityMapper implements Mapper<Ad,AdVO> {
+public class AdEntityMapper implements Mapper<AdEntity, Ad> {
 
     private List<PictureVO> pictures;
 
     @Override
-    public Ad mapToDestination(AdVO source) {
-        return Ad.builder()
+    public AdEntity mapToDestination(Ad source) {
+        return AdEntity.builder()
                 .id(source.getId())
                 .typology(source.getTypology().name())
                 .description(source.getDescription().getText())
@@ -29,9 +29,9 @@ public class AdEntityMapper implements Mapper<Ad,AdVO> {
     }
 
     @Override
-    public AdVO mapToSource(Ad source) {
+    public Ad mapToSource(AdEntity source) {
 
-        AdVO adVO = new AdVO(
+        Ad ad = new Ad(
                 source.getId(),
                 Typology.valueOf(source.getTypology()),
                 new DescriptionVO(source.getDescription()),
@@ -41,7 +41,8 @@ public class AdEntityMapper implements Mapper<Ad,AdVO> {
                 pictures
 
         );
-        return adVO;
+        ad.setIrrelevantSince(new IrrelevantSinceVO(source.getIrrelevantSince()));
+        return ad;
     }
 
 

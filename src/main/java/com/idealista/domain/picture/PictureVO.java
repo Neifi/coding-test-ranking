@@ -3,7 +3,7 @@ package com.idealista.domain.picture;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
+
 public class PictureVO {
 
     private Integer id;
@@ -17,4 +17,15 @@ public class PictureVO {
         this.quality = quality;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public UrlVO getUrl() {
+        return url;
+    }
+
+    public QualityVO getQuality() {
+        return quality;
+    }
 }

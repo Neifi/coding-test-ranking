@@ -1,6 +1,6 @@
 package com.idealista.domain.rating.rules.impl;
 
-import com.idealista.domain.ad.AdVO;
+import com.idealista.domain.ad.Ad;
 import com.idealista.domain.ad.Typology;
 import com.idealista.domain.rating.rules.RatingRule;
 
@@ -19,7 +19,7 @@ public class DescriptionRule implements RatingRule {
     private int totalScore = 0;
 
     @Override
-    public int getScore(AdVO ad) {
+    public int getScore(Ad ad) {
 
         if (!ad.getDescription().isEmpty()) {
             List<String> descriptionWords = ad.getDescription().getWords();
