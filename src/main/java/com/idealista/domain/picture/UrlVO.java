@@ -1,4 +1,4 @@
-package com.idealista.domain.picture;
+package com.idealista.domain.pictureEntity;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.util.StringUtils;

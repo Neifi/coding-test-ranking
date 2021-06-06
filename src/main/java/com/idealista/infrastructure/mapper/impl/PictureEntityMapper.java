@@ -1,18 +1,19 @@
 package com.idealista.infrastructure.mapper.impl;
 
-import com.idealista.domain.picture.Picture;
-import com.idealista.domain.picture.QualityVO;
-import com.idealista.domain.picture.UrlVO;
+import com.idealista.domain.pictureEntity.Picture;
+import com.idealista.domain.pictureEntity.QualityVO;
+import com.idealista.domain.pictureEntity.UrlVO;
 import com.idealista.infrastructure.mapper.Mapper;
+import com.idealista.infrastructure.persistence.model.PictureEntity;
 
-public class PictureEntityMapper implements Mapper<com.idealista.infrastructure.persistence.model.Picture, Picture> {
+public class PictureEntityMapper implements Mapper<PictureEntity, Picture> {
     @Override
-    public com.idealista.infrastructure.persistence.model.Picture mapToDestination(Picture source) {
+    public PictureEntity mapToDestination(Picture source) {
         return null;
     }
 
     @Override
-    public Picture mapToSource(com.idealista.infrastructure.persistence.model.Picture source) {
+    public Picture mapToSource(PictureEntity source) {
         return new Picture(
                 source.getId(),
                 new UrlVO(source.getUrl()),

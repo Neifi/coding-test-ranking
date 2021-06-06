@@ -1,7 +1,7 @@
 package com.idealista.infrastructure.persistence;
 
 import com.idealista.domain.ad.Ad;
-import com.idealista.domain.picture.Picture;
+import com.idealista.domain.pictureEntity.Picture;
 import com.idealista.domain.repository.AdRepository;
 import com.idealista.domain.repository.PictureRepository;
 import com.idealista.infrastructure.mapper.impl.AdEntityMapper;

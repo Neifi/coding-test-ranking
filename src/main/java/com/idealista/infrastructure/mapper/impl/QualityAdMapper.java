@@ -1,8 +1,8 @@
 package com.idealista.infrastructure.mapper.impl;
 
 import com.idealista.domain.ad.Ad;
-import com.idealista.domain.picture.Picture;
-import com.idealista.domain.picture.UrlVO;
+import com.idealista.domain.pictureEntity.Picture;
+import com.idealista.domain.pictureEntity.UrlVO;
 import com.idealista.infrastructure.api.QualityAd;
 import com.idealista.infrastructure.mapper.Mapper;
 import org.springframework.stereotype.Component;

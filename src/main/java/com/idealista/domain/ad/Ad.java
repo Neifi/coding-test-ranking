@@ -1,6 +1,6 @@
 package com.idealista.domain.ad;
 
-import com.idealista.domain.picture.Picture;
+import com.idealista.domain.pictureEntity.Picture;
 import lombok.Getter;
 import lombok.Setter;
 

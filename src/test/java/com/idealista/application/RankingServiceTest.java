@@ -2,9 +2,9 @@ package com.idealista.application;
 
 import com.idealista.application.services.RankingService;
 import com.idealista.domain.ad.*;
-import com.idealista.domain.picture.Picture;
-import com.idealista.domain.picture.QualityVO;
-import com.idealista.domain.picture.UrlVO;
+import com.idealista.domain.pictureEntity.Picture;
+import com.idealista.domain.pictureEntity.QualityVO;
+import com.idealista.domain.pictureEntity.UrlVO;
 import com.idealista.domain.repository.AdRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -113,7 +113,7 @@ public class RankingServiceTest {
 
     @Test
     public void should_calculate_scores_for_ads() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Picture picture2 = new Picture(2, new UrlVO("https://test.com"), QualityVO.HD);
         Picture picture3 = new Picture(3, new UrlVO("https://test.com"), QualityVO.HD);
         Picture picture4 = new Picture(4, new UrlVO("https://test.com"), QualityVO.HD);
@@ -123,7 +123,7 @@ public class RankingServiceTest {
                 new DescriptionVO(GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100),
                 new Score(0),
-                Arrays.asList(picture, picture2, picture3, picture4, picture5));
+                Arrays.asList(pictureEntity, picture2, picture3, picture4, picture5));
 
         rankingService.calculateScore(Arrays.<Ad>asList(ad));
 

@@ -1,9 +1,10 @@
 package com.idealista.infrastructure.persistence;
 
-import com.idealista.domain.picture.Picture;
+import com.idealista.domain.pictureEntity.Picture;
 import com.idealista.domain.repository.PictureRepository;
 import com.idealista.infrastructure.mapper.Mapper;
 import com.idealista.infrastructure.mapper.impl.PictureEntityMapper;
+import com.idealista.infrastructure.persistence.model.PictureEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class InMemoryPictureRepository implements PictureRepository {
 
     private final InMemoryDB inMemoryDB = InMemoryDB.getInstance();
-    private Mapper<com.idealista.infrastructure.persistence.model.Picture, Picture> mapper = new PictureEntityMapper();
+    private Mapper<PictureEntity, Picture> mapper = new PictureEntityMapper();
 
     @Override
     public List<Picture> findAll() {
@@ -45,7 +46,7 @@ public class InMemoryPictureRepository implements PictureRepository {
         return this.inMemoryDB.
                 getPictures()
                 .stream()
-                .filter(picture -> picture.getId() == id)
+                .filter(pictureEntity -> pictureEntity.getId() == id)
                 .map(mapper::mapToSource)
                 .collect(Collectors.toList()).get(0);
     }

@@ -1,4 +1,4 @@
-package com.idealista.intraestructure;
+package com.idealista.infrastructure;
 
 import com.idealista.application.services.RankingService;
 import com.idealista.domain.ad.*;

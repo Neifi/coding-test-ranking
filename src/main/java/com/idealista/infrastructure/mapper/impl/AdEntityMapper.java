@@ -1,7 +1,7 @@
 package com.idealista.infrastructure.mapper.impl;
 
 import com.idealista.domain.ad.*;
-import com.idealista.domain.picture.Picture;
+import com.idealista.domain.pictureEntity.Picture;
 import com.idealista.infrastructure.mapper.Mapper;
 import com.idealista.infrastructure.persistence.model.AdEntity;
 

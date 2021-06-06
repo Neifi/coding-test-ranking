@@ -1,6 +1,6 @@
 package com.idealista.domain.repository;
 
-import com.idealista.domain.picture.Picture;
+import com.idealista.domain.pictureEntity.Picture;
 
 import java.util.List;
 

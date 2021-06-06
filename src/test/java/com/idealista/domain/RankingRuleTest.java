@@ -1,9 +1,9 @@
 package com.idealista.domain;
 
 import com.idealista.domain.ad.*;
-import com.idealista.domain.picture.Picture;
-import com.idealista.domain.picture.QualityVO;
-import com.idealista.domain.picture.UrlVO;
+import com.idealista.domain.pictureEntity.Picture;
+import com.idealista.domain.pictureEntity.QualityVO;
+import com.idealista.domain.pictureEntity.UrlVO;
 import com.idealista.domain.services.PointsCalculator;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -81,13 +81,13 @@ public class RankingRuleTest {
 
     @Test
     public void when_ad_have_one_hd_image_should_add_20_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad withHDImageAd = new Ad(1, Typology.FLAT,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
                 new GardenSizeVO(100),
                 scoreSpy,
-                Arrays.asList(picture));
+                Arrays.asList(pictureEntity));
 
         pointsCalculator.calculate(withHDImageAd);
 
@@ -98,13 +98,13 @@ public class RankingRuleTest {
 
     @Test
     public void when_ad_have_no_hd_image_should_add_10_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.SD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.SD);
         Ad noHDImageAd = new Ad(1, Typology.FLAT,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
                 new GardenSizeVO(100),
                 this.scoreSpy,
-                Arrays.asList(picture));
+                Arrays.asList(pictureEntity));
 
 
         pointsCalculator.calculate(noHDImageAd);
@@ -124,13 +124,13 @@ public class RankingRuleTest {
 
     @Test
     public void when_ad_has_description_text_should_add_5_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1, Typology.FLAT,
                 new DescriptionVO("useful description"),
                 new HouseSizeVO(100),
                 new GardenSizeVO(100),
                 this.scoreSpy,
-                Arrays.asList(picture));
+                Arrays.asList(pictureEntity));
 
         pointsCalculator.calculate(ad);
         Mockito.verify(scoreSpy, times(1)).increase(5);
@@ -192,13 +192,13 @@ public class RankingRuleTest {
 
     @Test
     public void when_apartment_ad_meet_completeness_criteria_should_add_40_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1,
                 Typology.FLAT,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático " + FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100),
                 this.scoreSpy,
-                Arrays.asList(picture));
+                Arrays.asList(pictureEntity));
 
         pointsCalculator.calculate(ad);
 
@@ -208,13 +208,13 @@ public class RankingRuleTest {
 
     @Test
     public void when_chalet_ad_meet_completeness_criteria_should_add_40_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1, Typology.CHALET,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático " + GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100),
                 new GardenSizeVO(100),
                 this.scoreSpy,
-                Arrays.asList(picture));
+                Arrays.asList(pictureEntity));
 
         pointsCalculator.calculate(ad);
 
@@ -224,13 +224,13 @@ public class RankingRuleTest {
 
     @Test
     public void when_garage_ad_meet_completeness_criteria_should_add_40_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1, Typology.GARAGE,
                 new DescriptionVO(""),
                 new HouseSizeVO(100),
                 new GardenSizeVO(0),
                 this.scoreSpy,
-                Arrays.asList(picture));
+                Arrays.asList(pictureEntity));
 
         pointsCalculator.calculate(ad);
 
@@ -254,12 +254,12 @@ public class RankingRuleTest {
 
     @Test
     public void when_chalet_ad_dont_meet_completeness_criteria_should_add_40_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1, Typology.CHALET,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático " + GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100),
                 this.scoreSpy,
-                Arrays.asList(picture));
+                Arrays.asList(pictureEntity));
 
         pointsCalculator.calculate(ad);
 
@@ -269,7 +269,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_apartment_ad_dont_meet_completeness_criteria_should_add_40_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1,
                 Typology.FLAT,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático " + FIFTY_WORDS_DESCRIPTION_TEXT),
@@ -285,7 +285,7 @@ public class RankingRuleTest {
 
     @Test
     public void ad_must_dont_have_more_than_max_points() {
-        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture pictureEntity = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Picture picture2 = new Picture(2, new UrlVO("https://test.com"), QualityVO.HD);
         Picture picture3 = new Picture(3, new UrlVO("https://test.com"), QualityVO.HD);
         Picture picture4 = new Picture(4, new UrlVO("https://test.com"), QualityVO.HD);
@@ -297,7 +297,7 @@ public class RankingRuleTest {
                 new HouseSizeVO(100),
                 new GardenSizeVO(100),
                 new Score(0),
-                Arrays.asList(picture, picture2, picture3, picture4, picture5));
+                Arrays.asList(pictureEntity, picture2, picture3, picture4, picture5));
 
         pointsCalculator.calculate(ad);
 

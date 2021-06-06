@@ -1,7 +1,7 @@
 package com.idealista.infrastructure.persistence;
 
 import com.idealista.infrastructure.persistence.model.AdEntity;
-import com.idealista.infrastructure.persistence.model.Picture;
+import com.idealista.infrastructure.persistence.model.PictureEntity;
 
 import java.util.*;
 
@@ -9,7 +9,7 @@ public class InMemoryDB {
     private static InMemoryDB inMemoryDB = null;
 
     private List<AdEntity> ads;
-    private ArrayList<Picture> pictures = new ArrayList<>();
+    private ArrayList<PictureEntity> pictureEntities = new ArrayList<>();
 
     private InMemoryDB() {
         ads =  Collections.synchronizedList(new ArrayList<AdEntity>());
@@ -22,14 +22,14 @@ public class InMemoryDB {
         ads.add(new AdEntity(7, "GARAGE", "Garaje en el centro de Albacete", Collections.<Integer>emptyList(), 300, null, 100, null));
         ads.add(new AdEntity(8, "CHALET", "Maravilloso chalet situado en lAs afueras de un pequeño pueblo rural. El entorno es espectacular, las vistas magníficas. ¡Cómprelo ahora!", Arrays.asList(1, 7), 300, null, null, null));
 
-        pictures = new ArrayList<Picture>();
-        pictures.add(new Picture(1, "http://www.idealista.com/pictures/1", "SD"));
-        pictures.add(new Picture(2, "http://www.idealista.com/pictures/2", "HD"));
-        pictures.add(new Picture(3, "http://www.idealista.com/pictures/3", "SD"));
-        pictures.add(new Picture(4, "http://www.idealista.com/pictures/4", "HD"));
-        pictures.add(new Picture(5, "http://www.idealista.com/pictures/5", "SD"));
-        pictures.add(new Picture(6, "http://www.idealista.com/pictures/6", "SD"));
-        pictures.add(new Picture(7, "http://www.idealista.com/pictures/7", "SD"));
+        pictureEntities = new ArrayList<PictureEntity>();
+        pictureEntities.add(new PictureEntity(1, "http://www.idealista.com/pictures/1", "SD"));
+        pictureEntities.add(new PictureEntity(2, "http://www.idealista.com/pictures/2", "HD"));
+        pictureEntities.add(new PictureEntity(3, "http://www.idealista.com/pictures/3", "SD"));
+        pictureEntities.add(new PictureEntity(4, "http://www.idealista.com/pictures/4", "HD"));
+        pictureEntities.add(new PictureEntity(5, "http://www.idealista.com/pictures/5", "SD"));
+        pictureEntities.add(new PictureEntity(6, "http://www.idealista.com/pictures/6", "SD"));
+        pictureEntities.add(new PictureEntity(7, "http://www.idealista.com/pictures/7", "SD"));
     }
 
     public static InMemoryDB getInstance(){
@@ -44,17 +44,17 @@ public class InMemoryDB {
         return Collections.unmodifiableList(this.ads);
     }
 
-    public List<Picture> getPictures() {
+    public List<PictureEntity> getPictures() {
 
-        return Collections.unmodifiableList(this.pictures);
+        return Collections.unmodifiableList(this.pictureEntities);
     }
 
     public void addAd(AdEntity ad) {
         this.ads.add(ad);
     }
 
-    public void adPicture(Picture picture) {
-        this.pictures.add(picture);
+    public void adPicture(PictureEntity pictureEntity) {
+        this.pictureEntities.add(pictureEntity);
     }
 
     public void deleteAll() {

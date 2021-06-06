@@ -1,4 +1,4 @@
-package com.idealista.domain.picture;
+package com.idealista.domain.pictureEntity;
 
 import lombok.Builder;
 import lombok.Getter;
