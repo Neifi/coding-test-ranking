@@ -1,7 +1,7 @@
 package com.idealista.infrastructure.mapper.impl;
 
 import com.idealista.domain.ad.*;
-import com.idealista.domain.picture.PictureVO;
+import com.idealista.domain.picture.Picture;
 import com.idealista.infrastructure.mapper.Mapper;
 import com.idealista.infrastructure.persistence.model.AdEntity;
 
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class AdEntityMapper implements Mapper<AdEntity, Ad> {
 
-    private List<PictureVO> pictures;
+    private List<Picture> pictures;
 
     @Override
     public AdEntity mapToDestination(Ad source) {
@@ -19,7 +19,7 @@ public class AdEntityMapper implements Mapper<AdEntity, Ad> {
                 .typology(source.getTypology().name())
                 .description(source.getDescription().getText())
                 .pictureUrls(source.getPictures().stream()
-                        .map(PictureVO::getId)
+                        .map(Picture::getId)
                         .collect(Collectors.toList()))
                 .houseSize(source.getHouseSize().value())
                 .gardenSize(source.getGardenSize().value())
@@ -47,7 +47,7 @@ public class AdEntityMapper implements Mapper<AdEntity, Ad> {
 
 
 
-    public void setPictures(List<PictureVO> pictures) {
+    public void setPictures(List<Picture> pictures) {
         this.pictures = pictures;
     }
 }

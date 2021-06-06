@@ -1,7 +1,7 @@
 package com.idealista.domain;
 
 import com.idealista.domain.ad.*;
-import com.idealista.domain.picture.PictureVO;
+import com.idealista.domain.picture.Picture;
 import com.idealista.domain.picture.QualityVO;
 import com.idealista.domain.picture.UrlVO;
 import com.idealista.domain.services.PointsCalculator;
@@ -81,7 +81,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_ad_have_one_hd_image_should_add_20_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad withHDImageAd = new Ad(1, Typology.FLAT,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
@@ -98,7 +98,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_ad_have_no_hd_image_should_add_10_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.SD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.SD);
         Ad noHDImageAd = new Ad(1, Typology.FLAT,
                 new DescriptionVO("DESC"),
                 new HouseSizeVO(100),
@@ -124,7 +124,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_ad_has_description_text_should_add_5_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1, Typology.FLAT,
                 new DescriptionVO("useful description"),
                 new HouseSizeVO(100),
@@ -164,8 +164,7 @@ public class RankingRuleTest {
     public void when_chalet_ad_has_description_text_size_greater_than_50_should_add_20_points() {
         Ad ad = new Ad(1, Typology.CHALET,
                 new DescriptionVO(GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
-                new HouseSizeVO(100),
-                new GardenSizeVO(100),
+                new HouseSizeVO(null),
                 this.scoreSpy,
                 Collections.emptyList());
 
@@ -193,7 +192,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_apartment_ad_meet_completeness_criteria_should_add_40_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1,
                 Typology.FLAT,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático " + FIFTY_WORDS_DESCRIPTION_TEXT),
@@ -209,7 +208,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_chalet_ad_meet_completeness_criteria_should_add_40_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1, Typology.CHALET,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático " + GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100),
@@ -225,7 +224,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_garage_ad_meet_completeness_criteria_should_add_40_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1, Typology.GARAGE,
                 new DescriptionVO(""),
                 new HouseSizeVO(100),
@@ -255,7 +254,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_chalet_ad_dont_meet_completeness_criteria_should_add_40_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1, Typology.CHALET,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático " + GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),
                 new HouseSizeVO(100),
@@ -270,7 +269,7 @@ public class RankingRuleTest {
 
     @Test
     public void when_apartment_ad_dont_meet_completeness_criteria_should_add_40_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
         Ad ad = new Ad(1,
                 Typology.FLAT,
                 new DescriptionVO("Luminoso,Nuevo,Céntrico,Reformado,Ático " + FIFTY_WORDS_DESCRIPTION_TEXT),
@@ -286,11 +285,11 @@ public class RankingRuleTest {
 
     @Test
     public void ad_must_dont_have_more_than_max_points() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
-        PictureVO picture2 = new PictureVO(2, new UrlVO("https://test.com"), QualityVO.HD);
-        PictureVO picture3 = new PictureVO(3, new UrlVO("https://test.com"), QualityVO.HD);
-        PictureVO picture4 = new PictureVO(4, new UrlVO("https://test.com"), QualityVO.HD);
-        PictureVO picture5 = new PictureVO(5, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture2 = new Picture(2, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture3 = new Picture(3, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture4 = new Picture(4, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture5 = new Picture(5, new UrlVO("https://test.com"), QualityVO.HD);
         Score spyScore = spy(new Score(0));
         Ad ad = new Ad(1,
                 Typology.CHALET,

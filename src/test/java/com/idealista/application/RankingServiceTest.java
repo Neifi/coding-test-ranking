@@ -2,7 +2,7 @@ package com.idealista.application;
 
 import com.idealista.application.services.RankingService;
 import com.idealista.domain.ad.*;
-import com.idealista.domain.picture.PictureVO;
+import com.idealista.domain.picture.Picture;
 import com.idealista.domain.picture.QualityVO;
 import com.idealista.domain.picture.UrlVO;
 import com.idealista.domain.repository.AdRepository;
@@ -113,11 +113,11 @@ public class RankingServiceTest {
 
     @Test
     public void should_calculate_scores_for_ads() {
-        PictureVO picture = new PictureVO(1, new UrlVO("https://test.com"), QualityVO.HD);
-        PictureVO picture2 = new PictureVO(2, new UrlVO("https://test.com"), QualityVO.HD);
-        PictureVO picture3 = new PictureVO(3, new UrlVO("https://test.com"), QualityVO.HD);
-        PictureVO picture4 = new PictureVO(4, new UrlVO("https://test.com"), QualityVO.HD);
-        PictureVO picture5 = new PictureVO(5, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture = new Picture(1, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture2 = new Picture(2, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture3 = new Picture(3, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture4 = new Picture(4, new UrlVO("https://test.com"), QualityVO.HD);
+        Picture picture5 = new Picture(5, new UrlVO("https://test.com"), QualityVO.HD);
         Score spyScore = spy(new Score(0));
         Ad ad = new Ad(1, Typology.FLAT,
                 new DescriptionVO(GREATER_THAN_FIFTY_WORDS_DESCRIPTION_TEXT),

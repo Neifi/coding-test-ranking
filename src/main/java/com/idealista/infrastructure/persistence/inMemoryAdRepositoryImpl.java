@@ -1,7 +1,7 @@
 package com.idealista.infrastructure.persistence;
 
 import com.idealista.domain.ad.Ad;
-import com.idealista.domain.picture.PictureVO;
+import com.idealista.domain.picture.Picture;
 import com.idealista.domain.repository.AdRepository;
 import com.idealista.domain.repository.PictureRepository;
 import com.idealista.infrastructure.mapper.impl.AdEntityMapper;
@@ -25,12 +25,12 @@ public class inMemoryAdRepositoryImpl implements AdRepository {
 
     @Override
     public List<Ad> findAll() {
-        List<PictureVO>pictureVOS = new ArrayList<>();
+        List<Picture> pictures = new ArrayList<>();
         List<AdEntity> ads = inMemoryDB.getAd();
         List<Ad> adList = new ArrayList<>();
         for (AdEntity ad:ads) {
-         pictureVOS = pictureRepository.findAll(ad.getPictureUrls());
-         mapper.setPictures(pictureVOS);
+         pictures = pictureRepository.findAll(ad.getPictureUrls());
+         mapper.setPictures(pictures);
          adList.add(mapper.mapToSource(ad));
         }
 

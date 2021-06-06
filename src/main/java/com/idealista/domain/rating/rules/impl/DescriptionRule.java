@@ -13,36 +13,23 @@ public class DescriptionRule implements RatingRule {
     private final int DESCRIPTION_GREATER_THAN_RANGE_APARTMENT_VALUE = 30;
     private final int DESCRIPTION_GREATER_THAN_RANGE_CHALET_VALUE = 20;
     private final int KEYWORD_MACHT_VALUE = 5;
-    final int INITIAL_RANGE = 20;
-    final int END_RANGE = 49;
-
+    private final int MAX_LENGTH = 50;
+    private final int INITIAL_RANGE = 20;
+    private final int END_RANGE = 49;
+    private List<String> descriptionWords;
+    private int descriptionLength;
     private int totalScore = 0;
 
     @Override
     public int getScore(Ad ad) {
-
         if (!ad.getDescription().isEmpty()) {
-            List<String> descriptionWords = ad.getDescription().getWords();
-            int descriptionLength = ad.getDescription().getWords().size();
-
-
             totalScore += HAS_DESCRIPTION_VALUE;
 
-            if (Typology.FLAT.equals(ad.getTypology()) && descriptionWordSizeIsBetween(descriptionLength, INITIAL_RANGE, END_RANGE)) {
-                totalScore += DESCRIPTION_BETWEEN_RANGE_APARTMENT_VALUE;
-
-            }
-
-            if (Typology.FLAT.equals(ad.getTypology()) && descriptionWordSizeIsGreaterThan(descriptionLength, 50)) {
-                totalScore += DESCRIPTION_GREATER_THAN_RANGE_APARTMENT_VALUE;
-            }
-
-            if (Typology.CHALET.equals(ad.getTypology()) && descriptionWordSizeIsGreaterThan(descriptionLength, 51)) {
-                totalScore += DESCRIPTION_GREATER_THAN_RANGE_CHALET_VALUE;
-            }
-
-            //TODO keyword repository?
-            addDescriptionKeywordPoints(descriptionWords);
+            getWords(ad);
+            getDescriptionLength(ad);
+            addFlatScore(ad);
+            addChaletScore(ad);
+            addDescriptionKeywordScore();
 
             return totalScore;
         }
@@ -50,7 +37,41 @@ public class DescriptionRule implements RatingRule {
         return totalScore;
     }
 
-    private void addDescriptionKeywordPoints(List<String> descriptionWords) {
+    private void getWords(Ad ad) {
+        this.descriptionWords = ad.getDescription().getWords();
+    }
+
+    private void getDescriptionLength(Ad ad) {
+        this.descriptionLength = ad.getDescription().getWords().size();
+    }
+
+
+    private void addFlatScore(Ad ad) {
+        boolean isFlat = Typology.FLAT.equals(ad.getTypology());
+
+        if (isFlat && isWordLengthGreaterThanMaxSize(MAX_LENGTH)) {
+            totalScore += DESCRIPTION_GREATER_THAN_RANGE_APARTMENT_VALUE;
+        }
+        if (isFlat && isDescLengthInRange(INITIAL_RANGE, END_RANGE)) {
+            totalScore += DESCRIPTION_BETWEEN_RANGE_APARTMENT_VALUE;
+        }
+    }
+    private boolean isDescLengthInRange( int initalRange, int endRange) {
+        return descriptionLength >= initalRange && descriptionLength <= endRange;
+    }
+
+    private void addChaletScore(Ad ad) {
+        boolean isChalet = Typology.CHALET.equals(ad.getTypology());
+        if (isChalet && isWordLengthGreaterThanMaxSize(MAX_LENGTH+1)) {
+            totalScore += DESCRIPTION_GREATER_THAN_RANGE_CHALET_VALUE;
+        }
+    }
+
+    private boolean isWordLengthGreaterThanMaxSize(int maxSize) {
+
+        return descriptionLength >= maxSize;
+    }
+    private void addDescriptionKeywordScore() {
         long words = getDescriptionKeywords(descriptionWords);
 
         totalScore += KEYWORD_MACHT_VALUE * words;
@@ -64,12 +85,5 @@ public class DescriptionRule implements RatingRule {
                 || w.equalsIgnoreCase("Ático")).count();
     }
 
-    private boolean descriptionWordSizeIsGreaterThan(int descriptionLength, int maxSize) {
 
-        return descriptionLength >= maxSize;
-    }
-
-    private boolean descriptionWordSizeIsBetween(int descriptionLength, int initialSize, int endSize) {
-        return descriptionLength >= initialSize && descriptionLength <= endSize;
-    }
 }

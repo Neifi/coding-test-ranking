@@ -1,7 +1,6 @@
 package com.idealista.domain.ad;
 
-import com.idealista.domain.picture.PictureVO;
-import lombok.EqualsAndHashCode;
+import com.idealista.domain.picture.Picture;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,13 +17,13 @@ public class Ad {
     private Integer id;
     private Typology typology;
     private DescriptionVO description;
-    private List<PictureVO> pictures = new ArrayList<>();
+    private List<Picture> pictures = new ArrayList<>();
     private HouseSizeVO houseSize;
     private GardenSizeVO gardenSize;
     private Score score;
     private IrrelevantSinceVO irrelevantSince;
 
-    public Ad(Integer id, Typology typology, DescriptionVO description, HouseSizeVO houseSize, GardenSizeVO gardenSize, Score score, List<PictureVO> pictures) {
+    public Ad(Integer id, Typology typology, DescriptionVO description, HouseSizeVO houseSize, GardenSizeVO gardenSize, Score score, List<Picture> pictures) {
 
         this.id = id;
         this.typology = typology;
@@ -36,7 +35,7 @@ public class Ad {
         this.irrelevantSince = new IrrelevantSinceVO();
     }
 
-    public Ad(Integer id, Typology typology, DescriptionVO description, HouseSizeVO houseSize, Score score, List<PictureVO> pictures) {
+    public Ad(Integer id, Typology typology, DescriptionVO description, HouseSizeVO houseSize, Score score, List<Picture> pictures) {
 
         this.id = id;
         this.typology = typology;
@@ -49,7 +48,7 @@ public class Ad {
 
     }
 
-    public Ad(Integer id, Typology typology, HouseSizeVO houseSize, Score score, List<PictureVO> pictures) {
+    public Ad(Integer id, Typology typology, HouseSizeVO houseSize, Score score, List<Picture> pictures) {
 
         this.id = id;
         this.typology = typology;
@@ -60,10 +59,6 @@ public class Ad {
         this.score = score;
         this.irrelevantSince = new IrrelevantSinceVO();
 
-    }
-
-    public void setIrrelevantSince(IrrelevantSinceVO irrelevantSince) {
-        this.irrelevantSince = irrelevantSince;
     }
 
     public boolean isRelevant() {

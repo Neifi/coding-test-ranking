@@ -51,12 +51,11 @@ public class PointsCalculatorImpl implements PointsCalculator {
     }
 
     @Override
-    public Ad calculate(Ad ad) {
+    public void calculate(Ad ad) {
         calculateDescriptionPoints(ad);
         calculateImagePoints(ad);
         calculateCompletenessPoints(ad);
         setRelevance(ad);
-        return ad;
     }
 
 

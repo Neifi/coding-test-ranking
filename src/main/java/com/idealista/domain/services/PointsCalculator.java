@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface PointsCalculator {
 
-    Ad calculate(Ad ad);
+    void calculate(Ad ad);
 }

@@ -1,6 +1,7 @@
 package com.idealista.application.services;
 
 
+import com.idealista.application.CalculateAdScore;
 import com.idealista.application.ListIrrelevantAds;
 import com.idealista.application.ListRelevantAds;
 import com.idealista.domain.ad.Ad;
@@ -18,7 +19,7 @@ import java.util.List;
 public class RankingServiceImpl implements RankingService{
 
     @Autowired
-    private PointsCalculator pointsCalculator;
+    private CalculateAdScore calculateAdScore;
 
     @Autowired
     private ListRelevantAds listRelevantAds;
@@ -39,7 +40,7 @@ public class RankingServiceImpl implements RankingService{
     @Override
     public void calculateScore(List<Ad> ads) {
         for (Ad ad:ads) {
-            pointsCalculator.calculate(ad);
+            calculateAdScore.calculate(ad);
         }
     }
 

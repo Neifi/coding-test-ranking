@@ -1,11 +1,5 @@
 package com.idealista.utils;
 
-import com.idealista.domain.ad.*;
-import com.idealista.domain.picture.PictureVO;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class AdUtils {
 
     public static final String TWENTY_WORDS_DESCRIPTION_TEXT = "Lorem ipsum dolor sit amet consectetur adipiscing elit, ridiculus cum felis ante malesuada viverra, suscipit natoque sollicitudin pulvinar himenaeos molestie.";

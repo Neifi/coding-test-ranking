@@ -19,12 +19,13 @@ public class Score {
     }
 
     public void decrease(int value) {
-        if(score > value) {
+        if(score >= value) {
             this.score -= value;
         }
     }
 
-    public void increase(int value) {
+    public void increase(Integer value) {
+
         if(value < 0){
             throw new RuntimeException("value cannot be less than zero");
         }

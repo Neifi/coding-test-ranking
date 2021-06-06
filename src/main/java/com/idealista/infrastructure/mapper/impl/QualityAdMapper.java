@@ -1,7 +1,7 @@
 package com.idealista.infrastructure.mapper.impl;
 
 import com.idealista.domain.ad.Ad;
-import com.idealista.domain.picture.PictureVO;
+import com.idealista.domain.picture.Picture;
 import com.idealista.domain.picture.UrlVO;
 import com.idealista.infrastructure.api.QualityAd;
 import com.idealista.infrastructure.mapper.Mapper;
@@ -19,7 +19,7 @@ public class QualityAdMapper implements Mapper<QualityAd, Ad> {
         qualityAd.setTypology(source.getTypology().name());
         qualityAd.setDescription(source.getDescription().getText());
         qualityAd.setPictureUrls(source.getPictures().stream()
-                .map(PictureVO::getUrl)
+                .map(Picture::getUrl)
                 .map(UrlVO::value)
                 .collect(Collectors.toList()));
         qualityAd.setHouseSize(source.getHouseSize().value());
