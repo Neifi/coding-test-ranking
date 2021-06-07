@@ -53,3 +53,21 @@ Después creé un servicio llamado RankingService y su implementación utiliza l
 
 #Capa de infraestructura
 En el paquete de persistencia cree las 2 clases modelo Ad y Picture para que se mapeen y persistan en base de datos, no utilicé ningún mapper externo aunque lo mejor hubiese sido usar mapstruct. Luego para PublicAd y QualityAd tambien utilicé el mapeador que creé.
+
+##Preguntas
+- ¿Que arquitectura has usado? He usado arquitectura hexagonal ya que ofrece una manera más ágil de construir y testear software.
+    - ¿Se te ocurre alguna otra? Podría haber utilizado una arquitectura por capas más simple tipo MVC.
+    - ¿Que ventajas y desventajas ofrecería esa alternativa? La ventaja principal que le veo es que a la hora de implementarla es más sencilla y rápida, por contraparte no es tan fácil de escalar si se hace muy grande.
+        
+    -   En el esqueleto te dejamos preparadas algunas clases, entre ellas  `PublicAd`  y  `QualityAd`¿Que te aportan? Aportan una manera de transportar los datos que quieres que se envien al exterior(DTO)
+    - ¿Si lo hicieras desde cero, las eliminarías? Probablemente hubiese usado proyecciones para no tener que usar algun mapper.
+        
+    -   ¿Que cambiarías sobre el esqueleto que te hemos proporcionado? La clase AdVO
+    -  ¿Por qué? Según tengo entendido los ValueObject se identifican por los valores y no por el ID, había una clase llamada AdVO la cual tenía una ID y además no se reescribian los métodos equals y hashcode tal vez hubiera cambiado eso. Tambien hubiera preferido calcular las puntuaciones al vuelo cuando se crean los anuncios o cuando sean editados ya que al tener un solo endpoint para realizar todos los calculos, lo veo un cuello de botella en ese punto.
+        
+    -   A continuación te presentamos algunos escenarios en los que podría ejecutarse tu aplicación. Cuéntanos en cada uno que puntos fuertes y débiles ves en tu solución:
+        
+        -   **Gran cantidad de peticiones para listar los anuncios:** Gracias a que cada capa no esta acoplada una a la otra se podría utilizar un balanceador de carga, y distribuir la aplicacion en varias instancias, tambien una buena manera de optimizar las peticiones es implementar un almacenamiento en caché.
+        -   **Muchos cambios en los anuncios, por lo que hay que recalcular a menudo su puntuación:** En esta solución se ofrece un solo endpoint para calcular las puntuaciones porlo que supondria un cuello de botella, una posible solucion sería ejecutar esta operación a la hora de crear el anuncio o actualizar el anuncio dejando esa responsabilidad a la aplicación sin tener que llamar al endpoint.
+        -   **Alta concurrencia en el acceso a los datos:** Al implementar una base de datos en mémoria no tendría mucha escalabilidad así que se podría implementar una base de datos para escritura y otra para lectura. Otra cosa que se podría hacer es poner un caché entre la base de datos y la applicación así se liberará de carga la base de datos.
+        -   **Gran cantidad de anuncios:** Como ya he mencionado dado a tener una base de datos en memoria supondría un problema, pero al utilizar arquitectura hexagonal dónde las implementaciones de base de datos no implican un gran problema, se podría cambiar a un MongoDB por ejemplo por la escalabilidad horizontal que tiene.
