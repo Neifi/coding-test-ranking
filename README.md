@@ -43,7 +43,7 @@ Aquí he decidido utilizar las palabras claves hardcodeadas, pero creo que serí
 
 Despues para finalmente asignar los puntos totales al anuncio, creé un servicio llamado PointsCalculatorImp que implementa la interfaz PointsCalculator que tiene una firma llamada calculate, he querido hacerlo así pensando en que podrían haber otras maneras de calcular los puntos y para mantener la L y la D de SOLID. La implementación instancia en cada método la regla que va a utilizar, de cada una de ellas coge los puntos y llama al método increase de la clase Score para sumarle los puntos obtenidos en el caso de que sean puntos negativos se llama al método decrease, en este caso la unica regla que resta puntos es la de las imágenes, lo que hice fue comprobar si el resultado de ratingRule.getScore es negativo, en caso afirmativo llamo al método decrease de Score.
 
-#Capa de Aplicación
+# Capa de Aplicación
 
 En esta capa creé los casos de usos de la Apliación, ListIrrelevantAds,ListRelevantAds,CalculateAdScore.
 - ListIrrelevantAds y ListRelevantAds usan la interfaz AdRepository de dominio, llaman al método getAll y aplico un filtro utilizando streams y llamando al método isRelevant de la clase Ad.
