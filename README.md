@@ -1,4 +1,4 @@
-## Documento de decisiones
+# Documento de decisiones
 
 He decidido optar por una arquitectura hexagonal ya que he deducido que la aplicación podría tener bastante concurrencia en cuanto a peticiones, acceso a datos... En cuanto a metodología de desarrollo he optado por Test Driven Development a parte de las ventajas que tiene también me resulta más fácil pensar primero en lo que tiene que hacer la aplicación pasito a pasito.
 
