@@ -1,15 +1,15 @@
-##Documento de decisiones
+## Documento de decisiones
 
 He decidido optar por una arquitectura hexagonal ya que he deducido que la aplicación podría tener bastante concurrencia en cuanto a peticiones, acceso a datos... En cuanto a metodología de desarrollo he optado por Test Driven Development a parte de las ventajas que tiene también me resulta más fácil pensar primero en lo que tiene que hacer la aplicación pasito a pasito.
 
 El problema más dificl de afrontar fue el de pensar la propia arquitectura, ya que no tengo mucha experiencia en arquitectura hexagonal, pero tomé un curso y estos fueron los resultados.
 
-#Bounded context
+# Bounded context
 Tengo un anuncio, que tiene imágenes relacionadas esas imágenes tienen, su url, y calidad, también tiene una descripción que tiene relacionadas palabras claves. Tiene también una tipología, metros cuadrados de la casa o piso, encaso de tener jardin también los metros cuadrados, tiene un score y por ultimo una fecha que indica desde cuando ese anuncio ha dejado de ser relevante en función del score.
 
 Acontinuación muestro como he mapeado estos conceptos a código.
 
-#Capa de Dominio
+# Capa de Dominio
 
 Creé la Clase Ad la cual tiene los siguientes ValueObjects.
 
@@ -31,7 +31,7 @@ La clase Ad tiene los siguientes métodos:
 - IsRelevant que comprueba si el anuncio tiene un score mayor a 40.
 - IsComplete que devuelve si el anuncio es completo en función de los requisitos del funcional. Este método se apoya de otros 3 métodos **isApartamentComplete**,**IsChaletComplete**,**IsGagrageComplete**, quí unas de las desventajas de mi solución es tener que coger la tipología para utilizar un método u otro, talvez una manera mas elegante de hacer esto sería tener una clase por cada tipología que hereden de la clase Ad, también se podria hacer Ad abstracta poniendo el método isComplete abastracto dejando así la implementación para cada clase concreta.
 
-##Reglas para la puntuación
+## Reglas para la puntuación
 
 Para implementar las reglas de validación he utilicé el patrón strategy, primero creé la interfaz RatingRule con un método getScore que recibe por parametro un anuncio, despues creé 3 implementaciones, **CompletenessRule**,**DescriptionRule** y **ImageRule** cada una de estas clases cálcula la puntuación que se le dará al anuncio y será devuelta por el método getScore.
 Si vamos clase por clase:
@@ -51,10 +51,10 @@ En esta capa creé los casos de usos de la Apliación, ListIrrelevantAds,ListRel
 
 Después creé un servicio llamado RankingService y su implementación utiliza los casos de uso previamente mencionados.
 
-#Capa de infraestructura
+# Capa de infraestructura
 En el paquete de persistencia cree las 2 clases modelo Ad y Picture para que se mapeen y persistan en base de datos, no utilicé ningún mapper externo aunque lo mejor hubiese sido usar mapstruct. Luego para PublicAd y QualityAd tambien utilicé el mapeador que creé.
 
-##Preguntas
+## Preguntas
 - ¿Que arquitectura has usado? He usado arquitectura hexagonal ya que ofrece una manera más ágil de construir y testear software.
     - ¿Se te ocurre alguna otra? Podría haber utilizado una arquitectura por capas más simple tipo MVC.
     - ¿Que ventajas y desventajas ofrecería esa alternativa? La ventaja principal que le veo es que a la hora de implementarla es más sencilla y rápida, por contraparte no es tan fácil de escalar si se hace muy grande.
